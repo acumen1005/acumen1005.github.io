@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="内购（in-app purchase）问题"/>
+
+
+
+
+  <meta name="keywords" content="iOS 开发笔记,IAP,Apple 内购," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="acumen1005">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2016/09/27/2016-09-27-iOS-Develop-notes-IAP/"/>
+
+
+<meta name="description" content="内购介绍 With the StoreKit framework, you can offer in-app purchases to sell a variety of items — including premium content, virtual goods, and subscriptions — directly from within your app.（来自Apple官方文档）">
+<meta name="keywords" content="iOS 开发笔记,IAP,Apple 内购">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内购（in-app purchase）问题">
+<meta property="og:url" content="http://yoursite.com/2016/09/27/2016-09-27-iOS-Develop-notes-IAP/index.html">
+<meta property="og:site_name" content="acumen1005">
+<meta property="og:description" content="内购介绍 With the StoreKit framework, you can offer in-app purchases to sell a variety of items — including premium content, virtual goods, and subscriptions — directly from within your app.（来自Apple官方文档）">
+<meta property="og:updated_time" content="2018-04-20T05:17:08.560Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="内购（in-app purchase）问题">
+<meta name="twitter:description" content="内购介绍 With the StoreKit framework, you can offer in-app purchases to sell a variety of items — including premium content, virtual goods, and subscriptions — directly from within your app.（来自Apple官方文档）">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> 内购（in-app purchase）问题 - acumen1005 </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">acumen1005</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          内购（in-app purchase）问题
+        
+      </h1>
+      <h1 class="post-preview">
+      </h1>
+      <time class="post-time">
+          Sep 27 2016
+      </time>
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <h1 id="内购介绍"><a href="#内购介绍" class="headerlink" title="内购介绍"></a>内购介绍</h1><blockquote>
+<p>With the StoreKit framework, you can offer in-app purchases to sell a variety of items — including premium content, virtual goods, and subscriptions — directly from within your app.（来自Apple官方文档） </p>
+</blockquote>
+<p>大致的意思：使用StoreKit框架，你可以直接在你的app销售各种项目－包括优质的内容，虚拟商品和订阅类物品.  </p>
+<blockquote>
+<p>In-App Purchase allows you to embed a store inside your app using the Store Kit framework. This framework connects to the App Store on your app’s behalf to securely process payments from users, prompting them to authorize payment. The framework then notifies your app, which provides the purchased items to users. Use In-App Purchase to collect payment for additional features and content.（来自Apple官方文档）  </p>
+</blockquote>
+<p>大致的意思：内购允许你使用StoreKit框架在你的应用中嵌入一个商店（当然，不是真实的商店），StoreKit框架支持安全的支付并且提示用户授权支付。然后这个框架通知你的app（提供购买项目的app）。</p>
+<p>需要注意的一点：首先要确定一点你的app中需要内购的项目是否符合内购的要求。内购的商品严格的要求其实就是要满足－<code>虚拟商品，比如：游戏的关卡、视频等</code>。其实对于<code>实物，比如：衣服，键盘等</code>其实可以直接集成第三方的支付方式，比如：支付宝，微信等。  </p>
+<h1 id="集成内购"><a href="#集成内购" class="headerlink" title="集成内购"></a>集成内购</h1><h3 id="1-准备工作：证书、iTunnes-Connect中的一些协议问题等"><a href="#1-准备工作：证书、iTunnes-Connect中的一些协议问题等" class="headerlink" title="1.准备工作：证书、iTunnes Connect中的一些协议问题等"></a>1.准备工作：证书、iTunnes Connect中的一些协议问题等</h3><h5 id="1-1-证书颁发"><a href="#1-1-证书颁发" class="headerlink" title="1.1 证书颁发"></a><strong><em>1.1 证书颁发</em></strong></h5><p><code>https://developer.apple.com</code> 按照正常的证书发布流程，注意的就是在 <code>选择App需要支持的服务</code> 的时候要注意下 <code>In-App Purchase</code> 要勾选起来。</p>
+<h5 id="1-2-完成iTunnes-Connect一些协议的签约"><a href="#1-2-完成iTunnes-Connect一些协议的签约" class="headerlink" title="1.2 完成iTunnes Connect一些协议的签约"></a><strong><em>1.2 完成iTunnes Connect一些协议的签约</em></strong></h5><p>上面的图片来自<a href="https://developer.apple.com/library/content/documentation/LanguagesUtilities/Conceptual/iTunesConnectInAppPurchase_Guide/Chapters/Introduction.html#//apple_ref/doc/uid/TP40013727" target="_blank" rel="noopener">官方文档In-App Purchase Configuration Guide for iTunes Connect</a><br>大致的意思：<br>前提条件  </p>
+<ul>
+<li><p>最新Apple开发者程序许可协议  </p>
+</li>
+<li><p>最新的app支付合同  </p>
+</li>
+<li><p>一个有合适角色的iTunes Connect账户  </p>
+</li>
+<li><p>在iTunes Connect里有该app的纪录</p>
+</li>
+</ul>
+<p>其实主要的想讲的是1，2两点。  </p>
+<p>在这次的集成内购中正好赶上了Apple发布了新的开发者程序许可协议，这里只需要同意协议就好了。  </p>
+<p><code>协议、税务和银行业务</code> 在iTunes Connect了request最新的就ok了。</p>
+<p><em>注意：上面提到的两点没有完成的话，在下面添加内购商品的时候会出现 <code>创建按钮</code> 是灰色的</em></p>
+<h3 id="2-添加内购商品"><a href="#2-添加内购商品" class="headerlink" title="2.添加内购商品"></a>2.添加内购商品</h3><p>内购商品可以分为三大类：消耗型项目、非消耗型项目、订阅项目。  </p>
+<p>按照iTunes Connect的引导流程来就可以了。   </p>
+<p><em>注意：添加完成之后，内购商品有个ProductId是程序所需要的</em> </p>
+<h3 id="3-移动端的程序部分"><a href="#3-移动端的程序部分" class="headerlink" title="3.移动端的程序部分"></a>3.移动端的程序部分</h3><p>我们主要关注你的这一部分。</p>
+<p>导入头文件：<code>#import &lt;StoreKit/StoreKit.h&gt;</code></p>
+<h5 id="3-1-检查app是否允许内购"><a href="#3-1-检查app是否允许内购" class="headerlink" title="3.1 检查app是否允许内购"></a><strong><em>3.1 检查app是否允许内购</em></strong></h5><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>([<span class="built_in">SKPaymentQueue</span> canMakePayments])&#123;  </span><br><span class="line">       [<span class="keyword">self</span> requestWithProductId:productId];  </span><br><span class="line">   &#125;<span class="keyword">else</span>&#123;  </span><br><span class="line">       <span class="built_in">NSLog</span>(<span class="string">@"该app不允许内购"</span>);  </span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h5 id="3-2-向app-Store请求商品信息"><a href="#3-2-向app-Store请求商品信息" class="headerlink" title="3.2 向app Store请求商品信息"></a><strong><em>3.2 向app Store请求商品信息</em></strong></h5><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">	- (<span class="keyword">void</span>)requestWithProductId:(<span class="built_in">NSString</span> *)productId&#123;   </span><br><span class="line">	</span><br><span class="line">    <span class="built_in">NSSet</span> * set = [<span class="built_in">NSSet</span> setWithArray:@[productId]];</span><br><span class="line">    <span class="built_in">SKProductsRequest</span> * request = [[<span class="built_in">SKProductsRequest</span> alloc] initWithProductIdentifiers:set];</span><br><span class="line">    request.delegate = <span class="keyword">self</span>;</span><br><span class="line">    [request start];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">	<span class="comment">// 请求的回调函数</span></span><br><span class="line">- (<span class="keyword">void</span>)productsRequest:(<span class="built_in">SKProductsRequest</span> *)request didReceiveResponse:(<span class="built_in">SKProductsResponse</span> *)response &#123;</span><br><span class="line">    <span class="built_in">NSArray</span> *products = response.products;</span><br><span class="line">    <span class="keyword">if</span> (myProduct.count == <span class="number">0</span>) &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"无法获取产品信息，购买失败。"</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">SKMutablePayment</span> * payment = [<span class="built_in">SKMutablePayment</span> paymentWithProduct: products[<span class="number">0</span>]];</span><br><span class="line">    <span class="comment">//添加数量</span></span><br><span class="line">    payment.quantity = <span class="number">2</span>;</span><br><span class="line">    [[<span class="built_in">SKPaymentQueue</span> defaultQueue] addPayment:payment];</span><br><span class="line">&#125;</span><br><span class="line">	<span class="comment">// 请求结束的回调函数</span></span><br><span class="line">- (<span class="keyword">void</span>)requestDidFinish:(<span class="built_in">SKRequest</span> *)request &#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="3-3-添加观察者"><a href="#3-3-添加观察者" class="headerlink" title="3.3 添加观察者"></a><strong><em>3.3 添加观察者</em></strong></h5><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在支付页面添加监听购买结果</span></span><br><span class="line">   [[<span class="built_in">SKPaymentQueue</span> defaultQueue] addTransactionObserver:<span class="keyword">self</span>];</span><br></pre></td></tr></table></figure>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">	<span class="comment">//在各自的状态添加相应的操作</span></span><br><span class="line">	- (<span class="keyword">void</span>)paymentQueue:(<span class="built_in">SKPaymentQueue</span> *)queue updatedTransactions:(<span class="built_in">NSArray</span> *)transactions &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="built_in">SKPaymentTransaction</span> *transaction <span class="keyword">in</span> transactions) &#123;</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">switch</span> (transaction.transactionState) &#123;</span><br><span class="line">         </span><br><span class="line">            <span class="keyword">case</span> <span class="built_in">SKPaymentTransactionStatePurchased</span>: <span class="comment">//交易完成</span></span><br><span class="line">                <span class="built_in">NSLog</span>(<span class="string">@"transactionIdentifier = %@"</span>, transaction.transactionIdentifier);</span><br><span class="line">                [<span class="keyword">self</span> completeTransaction:transaction];</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="built_in">SKPaymentTransactionStateFailed</span>: <span class="comment">//交易失败</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="built_in">SKPaymentTransactionStateRestored</span>: <span class="comment">//已经购买过该商品</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="built_in">SKPaymentTransactionStatePurchasing</span>: <span class="comment">//商品添加进列表</span></span><br><span class="line">                <span class="built_in">NSLog</span>(<span class="string">@"商品添加进列表"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>监听用户的支付操作</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)completeTransaction:(<span class="built_in">SKPaymentTransaction</span> *)transaction &#123;</span><br><span class="line">    <span class="comment">// Your application should implement these two methods.</span></span><br><span class="line">    <span class="built_in">NSString</span> * productIdentifier = transaction.payment.productIdentifier;</span><br><span class="line">    <span class="built_in">NSURL</span> *recepitURL = [[<span class="built_in">NSBundle</span> mainBundle] appStoreReceiptURL];</span><br><span class="line">    <span class="built_in">NSData</span> *receipt = [<span class="built_in">NSData</span> dataWithContentsOfURL:recepitURL];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> ([productIdentifier length] &gt; <span class="number">0</span> &amp;&amp; receipt) &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 向自己的服务器验证购买凭证</span></span><br><span class="line">        [<span class="keyword">self</span> setIapCertificateWithReceipt:receipt];</span><br><span class="line">      </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    [[<span class="built_in">SKPaymentQueue</span> defaultQueue] finishTransaction: transaction];</span><br><span class="line">    </span><br><span class="line"><span class="meta">#warning 请求购买课程 成功</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><em>注意：最好是在自己的服务器端完成证购买凭证，只有验证通过了，才会给用户发放 ‘ 道具 ‘</em> </p>
+<h3 id="4-测试部分"><a href="#4-测试部分" class="headerlink" title="4.测试部分"></a>4.测试部分</h3><p>要在 iTunes Connect 中的 <code>用户和职能</code> 项目中添加一个沙盒测试员，这样就可以模拟内购的流程。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>在这次的集成中，深刻体会到官方文档的重要性，<code>前提条件</code> 很重要，遇到 <code>创建按钮灰色的问题</code> 其实还是挺纳闷的，网上的资料也没有很强调 <em>添加商品</em> 和 <em>签约协议</em> 的顺序，现在回头想其实， <em>签约协议</em> 本应该就在 <em>添加商品</em> 之前认为是一个很正常的逻辑，所以没有点出这个顺序吧。对于 <em>内购丢单</em> 的问题暂时还没遇到。   </p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><blockquote>
+<p><a href="http://blog.csdn.net/shenjie12345678/article/details/40978977/" target="_blank" rel="noopener">iOS应用程序内购/内付费(一)</a><br><a href="http://www.jianshu.com/p/86ac7d3b593a" target="_blank" rel="noopener">iOS开发内购全套图文教程</a><br><a href="https://developer.apple.com/in-app-purchase/" target="_blank" rel="noopener">官方文档</a></p>
+</blockquote>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/iOS-开发笔记/">iOS 开发笔记</a>
+		  
+			<a href="/tags/IAP/">IAP</a>
+		  
+			<a href="/tags/Apple-内购/">Apple 内购</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2016/10/14/2016-10-14-Apple-save/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">iOS 数据持久化方案</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2016/08/29/2016-08-29-iOS-Develop-notes/">
+        <span class="next-text nav-default">关于 NSArray 遍历 mutated 错误</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <div style="text-align:center;">
+        <button class="btn" id="load-disqus" onclick="disqus.load();">加载 Disqus 评论</button>
+    </div>
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2016 -
+    
+     
+    2019
+    <span class="footer-author">acumen1005.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+<script type="text/javascript">
+  var disqus_shortname = 'acumen1005';
+  var disqus_identifier = '2016/09/27/2016-09-27-iOS-Develop-notes-IAP/';
+
+  var disqus_title = "内购（in-app purchase）问题";
+
+
+  var disqus = {
+    load : function disqus(){
+        if(typeof DISQUS !== 'object') {
+          (function () {
+          var s = document.createElement('script'); s.async = true;
+          s.type = 'text/javascript';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+          }());
+          $('#load-disqus').remove(); ///加载后移除按钮
+        }
+    }
+  }
+
+  
+    var disqus_config = function () {
+        this.page.url = disqus_url;
+        this.page.identifier = disqus_identifier;
+        this.page.title = disqus_title;
+    };
+  
+
+</script>
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

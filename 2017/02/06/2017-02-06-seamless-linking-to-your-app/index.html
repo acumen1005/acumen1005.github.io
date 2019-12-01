@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="无缝链接 Universal Links"/>
+
+
+
+
+  <meta name="keywords" content="Universal Links,Deep Links,iOS9," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="acumen1005">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2017/02/06/2017-02-06-seamless-linking-to-your-app/"/>
+
+
+<meta name="description" content="Apple 在 iOS9 加入的一个通用链接 (Universal Link) 的深度链接特性，这个特性让我们可以无缝的引导用户到 APP 上，在用户使用时有更好的体验。本文简单的介绍一下什么是通用链接？如何使用这个 iOS9 的特性。 什么是通用链接？Apple 推出的通用链接：  一种能够方便的通过传统 HTTP 链接来启动 APP, 使用相同的网址打开网站和 APP。    通过唯一的 UR">
+<meta name="keywords" content="Universal Links,Deep Links,iOS9">
+<meta property="og:type" content="article">
+<meta property="og:title" content="无缝链接 Universal Links">
+<meta property="og:url" content="http://yoursite.com/2017/02/06/2017-02-06-seamless-linking-to-your-app/index.html">
+<meta property="og:site_name" content="acumen1005">
+<meta property="og:description" content="Apple 在 iOS9 加入的一个通用链接 (Universal Link) 的深度链接特性，这个特性让我们可以无缝的引导用户到 APP 上，在用户使用时有更好的体验。本文简单的介绍一下什么是通用链接？如何使用这个 iOS9 的特性。 什么是通用链接？Apple 推出的通用链接：  一种能够方便的通过传统 HTTP 链接来启动 APP, 使用相同的网址打开网站和 APP。    通过唯一的 UR">
+<meta property="og:updated_time" content="2018-04-20T05:23:00.182Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="无缝链接 Universal Links">
+<meta name="twitter:description" content="Apple 在 iOS9 加入的一个通用链接 (Universal Link) 的深度链接特性，这个特性让我们可以无缝的引导用户到 APP 上，在用户使用时有更好的体验。本文简单的介绍一下什么是通用链接？如何使用这个 iOS9 的特性。 什么是通用链接？Apple 推出的通用链接：  一种能够方便的通过传统 HTTP 链接来启动 APP, 使用相同的网址打开网站和 APP。    通过唯一的 UR">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> 无缝链接 Universal Links - acumen1005 </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">acumen1005</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          无缝链接 Universal Links
+        
+      </h1>
+      <h1 class="post-preview">
+      </h1>
+      <time class="post-time">
+          Feb 06 2017
+      </time>
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>Apple 在 iOS9 加入的一个通用链接 (Universal Link) 的深度链接特性，这个特性让我们可以无缝的引导用户到 APP 上，在用户使用时有更好的体验。本文简单的介绍一下什么是通用链接？如何使用这个 iOS9 的特性。</p>
+<h2 id="什么是通用链接？"><a href="#什么是通用链接？" class="headerlink" title="什么是通用链接？"></a>什么是通用链接？</h2><p>Apple 推出的通用链接：</p>
+<blockquote>
+<p>一种能够方便的通过传统 HTTP 链接来启动 APP, 使用相同的网址打开网站和 APP。  </p>
+</blockquote>
+<p>通过唯一的 URL，不需要特殊的 schema 就可以链接一个指定的视图到 APP 里。比如：我们在淘宝中使用了通用链接，用户在 Safari、webView 等控件中点击一个链接，如果这个链接是在我们所指定通用链接内的，那么我们的 iOS 设备就会启动淘宝 APP 并且跳转的到指定的视图页面，如果没有安装则会在 Safari 中响应该链接。</p>
+<p>集成通用链接三个步骤：</p>
+<ul>
+<li>创建一个包含 json 数据的 apple-app-site-association 文件</li>
+<li>把 apple-app-site-association 文件上传到服务器的根目录</li>
+<li>在 APP 里处理通用链接</li>
+</ul>
+<h2 id="Universal-Links-的好处"><a href="#Universal-Links-的好处" class="headerlink" title="Universal Links 的好处"></a>Universal Links 的好处</h2><p>与 URL Scheme 相比，两者都能唤醒 APP。URL Scheme 因为是自己定义的协议，所以在没有安装 APP 的情况下。无法直接打开。但是 Universal Link 就不同了。</p>
+<ul>
+<li>Universal Link 本身是一个 HTTP/HTTPS 的链接。如果没有安装 APP，默认打开 safari，体验更加流畅</li>
+<li>不同的 APP 定义 URL Scheme，可能会出现冲突。当时 Universal Link 在 server 端维护一个 apple-app-site-association 文件。其中 appID 字段来标示 APP。就不存在上面的问题。</li>
+<li>Universal Link 支持在 SFSafariViewController、UIWebView 和 WKWebView 跳转 APP</li>
+<li>Universal Link 可以被搜索引擎索引。web 和 app 页面存在一个自定义的映射关系。</li>
+</ul>
+<h2 id="如何集成通用链接？"><a href="#如何集成通用链接？" class="headerlink" title="如何集成通用链接？"></a>如何集成通用链接？</h2><h4 id="1-创建一个-apple-app-site-association-文件"><a href="#1-创建一个-apple-app-site-association-文件" class="headerlink" title="1. 创建一个 apple-app-site-association 文件"></a>1. 创建一个 apple-app-site-association 文件</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"applinks"</span>: &#123;</span><br><span class="line">        <span class="attr">"apps"</span>: [],</span><br><span class="line">        <span class="attr">"details"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"appID"</span>: <span class="string">"9JA89QQLNQ.com.apple.wwdc"</span>,</span><br><span class="line">                <span class="attr">"paths"</span>: [ <span class="string">"/wwdc/news/"</span>, <span class="string">"/videos/wwdc/2015/*"</span> ]</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"appID"</span>: <span class="string">"teamID.BundleID"</span>,</span><br><span class="line">                <span class="attr">"paths"</span>: [ <span class="string">"*"</span> ]</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>根据 json 数据中的 paths 字段来设定允许的路径，或者用 <code>*</code> 来表示任何路径都被允许，也就是我们可以使用任何链接打开 APP。</p>
+<p><em>hint：paths 中路径是大小敏感的</em></p>
+<p>其中 appID 字段的内容是 teamID + bundleID 来唯一确定 APP，中 teamID 需要在苹果开发者帐号中查看。bundleID 直接打开项目在 general 中查看。</p>
+<h4 id="2-上传-apple-app-site-association-文件到服务器"><a href="#2-上传-apple-app-site-association-文件到服务器" class="headerlink" title="2. 上传 apple-app-site-association 文件到服务器"></a>2. 上传 apple-app-site-association 文件到服务器</h4><p>需要注意的是 apple-app-site-association 文件要放在服务器的根目录下，并且该服务器是支持 HTTPS 的，不支持重定向，也就是说我们需要直接去访问 <code>https://&lt;domain&gt;/apple-app-site-association</code> 。通过这个 URL 我们发现对于 apple-app-site-association 文件我们不需要 <code>.json</code> 这样的后缀，虽然文件内包含的是 json 格式的数据。<br>一切都准备好了，我们就可以测试通用链接的特性了，在记事本或者短信中输入一个 URL 并点击如果跳转到你的 APP。那么就已经成功了。Apple 还提供了一个 <a href="https://search.developer.apple.com/appsearch-validation-tool/" target="_blank" rel="noopener">网站</a> 来检测通用链接是否可用。</p>
+<h4 id="3-在-APP-里处理通用链接"><a href="#3-在-APP-里处理通用链接" class="headerlink" title="3. 在 APP 里处理通用链接"></a>3. 在 APP 里处理通用链接</h4><p>在 APP 里处理通用链接，需要在 AppDelegate 里实现 <code>application(_:continueUserActivity:restorationHandler:)</code> 。很多其他功能的实现也是通过实现该代理方法，比如 spotlight 等。我们可以判断 userActivity 的 activityType 属性来确定是哪一种操作。<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> userActivity.activityType == <span class="built_in">NSUserActivityTypeBrowsingWeb</span> &#123;</span><br><span class="line">	<span class="comment">// coding to handle...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在该方法里路由 userActivity.webpageURL，也就是通过用户点击的链接来路由到指定的视图。</p>
+<h2 id="总结一下坑点"><a href="#总结一下坑点" class="headerlink" title="总结一下坑点"></a>总结一下坑点</h2><ol>
+<li>点击一个链接打开 APP 的之后 <em>右上角出现一个箭头</em>， 点击之后就会返回到 Safari 相应的页面。这里有个巨坑就是之后你会发现：你再点链接就不会跳转到 APP 了。这时候只有通过 3D Touch (6s 以上) 出现一个 ActionSheet，选择 <code>在 &quot;XXX&quot; 中打开</code> ，之后点击链接就又可以跳转到 APP 了。这里 Apple 的设计猜想是兼顾到 safari 打开链接吧，点击了右上角的箭头代表了你不想跳转到 APP 所以下次就直接用 safari 打开了。换句话说，就是 Apple 会记住上次的操作。还有在配置 apple-app-site-association 文件的 <code>paths</code> 字段的时候不要太暴力的用 <code>*</code>，如果 <code>route/a/*</code> 和 <code>route/b/*</code> 要比 <code>route/*</code> 要好。系统记住操作是根据 paths 来的。比如 <code>route/a/*</code> 用 safari 打开了，但是 <code>route/b/*</code>  这样的路径还是会跳转 APP，如果是 <code>route/*</code> 的话就一棒子打死了。</li>
+<li>safari 中是无法直接跳转到 APP 的。在 safari 输入一个链接之后，再下滑，会看到 <code>在 “xxx” 应用中打开</code> 这个一个 banner。点击跳转到 APP。如果你的页面会重定向到 H5 的话，记得将 domain 加入到 Associated Domains 中。</li>
+<li>universal links 要正常的在浏览器或者网页使用，是需要 <code>跨域</code> 的，也就是说 <a href="http://www.xxx.com/feed/1" target="_blank" rel="noopener">www.xxx.com/feed/1</a> 这个 universal link 如果在 <a href="http://www.xxx.com" target="_blank" rel="noopener">www.xxx.com</a> 网页里点击是无法唤起 app 的，因为他们处于相同的域名之下。像知乎，airbnb，就是用一个子域名专门来制作 universal link 。eg：ois.zhihu.com 当然对应的 <code>apple-app-site-association</code> 和 Xcode 中的 <code>Applinks</code> 也要做相应的修改。</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面所提及到的通用链接是深度链接（deep link）的一种表现形式，其基本的思想就是系统通过拦截和解析 HOST 地址，与系统注册的 HOST 进行匹配，如果发现就可以直接打开APP，之后的 URL 路由问题由 AppDelegate 代理方法来完成。<br>对于现在移动互联网时代，搜索引擎是无法搜索到 APP 内容数据，因此搜索引擎公司希望能够建立 web 和 APP 之间的关系索引，对于百度/google 等提供技术支持和相应的接口，让 APP 开发者提交 Web 和 APP 的映射关系。这样移动用户可以直接打开 APP，提交用户体验。</p>
+<p>值得注意的是对于 apple-app-site-association 文件的 json 数据中的 paths 字段有许多规则：</p>
+<ul>
+<li>“NOT /videos/wwdc/2010/*” 不处理含有 videos/wwdc/2010 前缀的路径</li>
+<li>“/videos/wwdc/201?/*” 用 ? 来表示任意的单个字符</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p><a href="http://stackoverflow.com/questions/32751225/ios9-universal-links-does-not-work/32751734#32751734" target="_blank" rel="noopener">iOS9: Universal Links does not work</a><br><a href="http://tech.glowing.com/cn/deferred-deep-linking-and-branch-sdk-in-ios/" target="_blank" rel="noopener">Deferred Deep Linking in iOS</a><br><a href="https://developer.apple.com/library/content/documentation/General/Conceptual/AppSearch/UniversalLinks.html" target="_blank" rel="noopener">Apple:Support Universal Links</a></p>
+</blockquote>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/Universal-Links/">Universal Links</a>
+		  
+			<a href="/tags/Deep-Links/">Deep Links</a>
+		  
+			<a href="/tags/iOS9/">iOS9</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/02/15/2017-02-15-async/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">由一个问题引发的思考－异步编程</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/01/02/2017-01-02-HTTPS/">
+        <span class="next-text nav-default">HTTPS 原理简单介绍</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <div style="text-align:center;">
+        <button class="btn" id="load-disqus" onclick="disqus.load();">加载 Disqus 评论</button>
+    </div>
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2016 -
+    
+     
+    2019
+    <span class="footer-author">acumen1005.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+<script type="text/javascript">
+  var disqus_shortname = 'acumen1005';
+  var disqus_identifier = '2017/02/06/2017-02-06-seamless-linking-to-your-app/';
+
+  var disqus_title = "无缝链接 Universal Links";
+
+
+  var disqus = {
+    load : function disqus(){
+        if(typeof DISQUS !== 'object') {
+          (function () {
+          var s = document.createElement('script'); s.async = true;
+          s.type = 'text/javascript';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+          }());
+          $('#load-disqus').remove(); ///加载后移除按钮
+        }
+    }
+  }
+
+  
+    var disqus_config = function () {
+        this.page.url = disqus_url;
+        this.page.identifier = disqus_identifier;
+        this.page.title = disqus_title;
+    };
+  
+
+</script>
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="iOS 数据持久化方案"/>
+
+
+
+
+  <meta name="keywords" content="iOS 开发笔记,数据持久化," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="acumen1005">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2016/10/14/2016-10-14-Apple-save/"/>
+
+
+<meta name="description" content="iOS 数据持久化方案大致可以分为四种。    属性列表（plist）   对象归档、解档   NSUserDefault 数据库    了解数据持久化首先需要了解一个应用目录（沙盒机制）下的文件目录结构。    12345- Documents //应用会将数据存储在这个文件夹里- Library    - Caches // 存放一些缓存数据   - Preferences //NSUserD">
+<meta name="keywords" content="iOS 开发笔记,数据持久化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 数据持久化方案">
+<meta property="og:url" content="http://yoursite.com/2016/10/14/2016-10-14-Apple-save/index.html">
+<meta property="og:site_name" content="acumen1005">
+<meta property="og:description" content="iOS 数据持久化方案大致可以分为四种。    属性列表（plist）   对象归档、解档   NSUserDefault 数据库    了解数据持久化首先需要了解一个应用目录（沙盒机制）下的文件目录结构。    12345- Documents //应用会将数据存储在这个文件夹里- Library    - Caches // 存放一些缓存数据   - Preferences //NSUserD">
+<meta property="og:updated_time" content="2018-04-20T05:20:29.735Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS 数据持久化方案">
+<meta name="twitter:description" content="iOS 数据持久化方案大致可以分为四种。    属性列表（plist）   对象归档、解档   NSUserDefault 数据库    了解数据持久化首先需要了解一个应用目录（沙盒机制）下的文件目录结构。    12345- Documents //应用会将数据存储在这个文件夹里- Library    - Caches // 存放一些缓存数据   - Preferences //NSUserD">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> iOS 数据持久化方案 - acumen1005 </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">acumen1005</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          iOS 数据持久化方案
+        
+      </h1>
+      <h1 class="post-preview">
+      </h1>
+      <time class="post-time">
+          Oct 14 2016
+      </time>
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>iOS 数据持久化方案大致可以分为四种。  </p>
+<ol>
+<li>属性列表（plist）  </li>
+<li>对象归档、解档  </li>
+<li>NSUserDefault</li>
+<li>数据库  </li>
+</ol>
+<p>了解数据持久化首先需要了解一个应用目录（沙盒机制）下的文件目录结构。   </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- Documents <span class="comment">//应用会将数据存储在这个文件夹里</span></span><br><span class="line">- Library </span><br><span class="line">   - Caches <span class="comment">// 存放一些缓存数据</span></span><br><span class="line">   - Preferences <span class="comment">//NSUserDefaults数据就是存在这个文件夹</span></span><br><span class="line">- tmp <span class="comment">//存放临时文件</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取Documents文件目录</span></span><br><span class="line"><span class="built_in">NSString</span> *path = <span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>).firstObject;</span><br></pre></td></tr></table></figure>
+<p>一些宏定义</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#define DATABASE_PATH [PATH_OF_DOCUMENT stringByAppendingPathComponent:@<span class="meta-string">"anbao.db"</span>]</span></span><br><span class="line"><span class="meta">#define PATH_OF_APP_HOME    NSHomeDirectory()</span></span><br><span class="line"><span class="meta">#define PATH_OF_TEMP        NSTemporaryDirectory()</span></span><br><span class="line"><span class="meta">#define PATH_OF_DOCUMENT    [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]</span></span><br></pre></td></tr></table></figure>
+<p>可以被序列化的类型介绍</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSArray</span>;</span><br><span class="line"><span class="built_in">NSMutableArray</span>;</span><br><span class="line"><span class="built_in">NSDictionary</span>;</span><br><span class="line"><span class="built_in">NSMutableDictionary</span>;</span><br><span class="line"><span class="built_in">NSData</span>;</span><br><span class="line"><span class="built_in">NSMutableData</span>;</span><br><span class="line"><span class="built_in">NSString</span>;</span><br><span class="line"><span class="built_in">NSMutableString</span>;</span><br><span class="line"><span class="built_in">NSNumber</span>;</span><br><span class="line"><span class="built_in">NSDate</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="plist文件"><a href="#plist文件" class="headerlink" title="plist文件"></a>plist文件</h2><p>plist文件可以将某些特定的类，以XML的格式保存起来，比较常见的plist的文件<strong><em>Info.plist</em></strong></p>
+<p>图片显示的就是plist文件所对应的XML文件格式。  </p>
+<p><strong><em>1.获取文件</em></strong><br>在项目的根目录下存在一个demo.plist</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *path = [[<span class="built_in">NSBundle</span> mainBundle] pathForResource:<span class="string">@"demo"</span> ofType:<span class="string">@"plist"</span>];</span><br><span class="line">   </span><br><span class="line">   <span class="comment">// 判断文件是否存在</span></span><br><span class="line">   <span class="keyword">if</span>([[<span class="built_in">NSFileManager</span> defaultManager] fileExistsAtPath:path]) &#123;</span><br><span class="line">       <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,path);</span><br><span class="line">       </span><br><span class="line">       <span class="comment">//..</span></span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">else</span> &#123;</span><br><span class="line">       <span class="built_in">NSLog</span>(<span class="string">@"文件不存在！"</span>);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p><strong><em>2.读取文件内容</em></strong>  </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSMutableDictionary</span> *result = [[<span class="built_in">NSMutableDictionary</span> alloc] initWithContentsOfFile:path];</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, result);</span><br></pre></td></tr></table></figure>
+<p>输出  </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2016</span><span class="number">-10</span><span class="number">-13</span> <span class="number">21</span>:<span class="number">54</span>:<span class="number">06.831</span> SaveDemo[<span class="number">986</span>:<span class="number">103991</span>] &#123;</span><br><span class="line">    demoKey = demoValue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong><em>3.写入文件</em></strong>  </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//写入</span></span><br><span class="line"><span class="built_in">NSMutableDictionary</span> *dict = [[<span class="built_in">NSMutableDictionary</span> alloc] init];</span><br><span class="line">[dict setObject:<span class="string">@"inputValue"</span> forKey:<span class="string">@"inputKey"</span>];</span><br><span class="line">[dict writeToFile:path atomically:<span class="literal">YES</span>];</span><br></pre></td></tr></table></figure>
+<h2 id="归档、解档"><a href="#归档、解档" class="headerlink" title="归档、解档"></a>归档、解档</h2><p>归档是iOS序列化的一种方式，我们需要实现的一个协议<em>NSCoding</em>协议  </p>
+<p><strong><em>1.协议说明</em></strong>  </p>
+<p>NSCoding协议才是归档和解档的一个重要协议，其中需要实现两个方法：  </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>) encodeWithCoder:(<span class="built_in">NSCoder</span> *)aCoder;</span><br><span class="line">- (<span class="keyword">id</span>) initWithCoder:(<span class="built_in">NSCoder</span> *)aDecoder</span><br></pre></td></tr></table></figure>
+<p><strong><em>2.NSKeyedArchiver 和 NSKeyedUnarchiver</em></strong>  </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将 UserBean 类归档到一个NSData实例中</span></span><br><span class="line"><span class="built_in">NSData</span> *data = [<span class="built_in">NSKeyedArchiver</span> archivedDataWithRootObject:userBean];</span><br></pre></td></tr></table></figure>
+<p>自定义类的对象是无法直接写入文件或者存入 NSUserDefault 中的，此时就需要对该对象进行归档。之后得到的NSData数据之后就可以进一步的使用 文件的I/O 或者 NSUserDefault 存入本地。</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// UserBean 对象的解档</span></span><br><span class="line">UserBean *userBean = [<span class="built_in">NSKeyedUnarchiver</span> unarchiveObjectWithData:data];</span><br></pre></td></tr></table></figure>
+<h2 id="NSUserDefault"><a href="#NSUserDefault" class="headerlink" title="NSUserDefault"></a>NSUserDefault</h2><p>应该算是比较常用的轻量级持久化方法，对于存一些当前用户的信息、状态等都是不错的选择。之前提到的沙盒机制，对于 NSUserDefault 的数据存放在 Library/Preferences 文件下。对于 app 的更新 NSUserDefault 的数据是不会删除的，除非用户卸载 app。  </p>
+<p><strong><em>1.存入对象要求</em></strong>  </p>
+<ul>
+<li>遵循NSCoding协议的对象才能存入NSUserDefault，如：UIImage 例外。</li>
+<li>对于比较大的数据不建议使用NSUserDefault。（据说NSUserDefault的 I/O 比较慢）  </li>
+</ul>
+<p><strong><em>2.存取</em></strong>   </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//存入 NSUserDefaults </span></span><br><span class="line">[[<span class="built_in">NSUserDefaults</span> standardUserDefaults] setObject:<span class="string">@"demoValue"</span> forKey:<span class="string">@"demoKey"</span>];</span><br><span class="line"><span class="comment">//读取 数据</span></span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,[[<span class="built_in">NSUserDefaults</span> standardUserDefaults] valueForKey:<span class="string">@"demoKey"</span>]);</span><br></pre></td></tr></table></figure>
+<p>对于存基本型的几个方法： </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)setInteger:(<span class="built_in">NSInteger</span>)value forKey:(<span class="built_in">NSString</span> *)defaultName;</span><br><span class="line">- (<span class="keyword">void</span>)setFloat:(<span class="keyword">float</span>)value forKey:(<span class="built_in">NSString</span> *)defaultName;</span><br><span class="line">- (<span class="keyword">void</span>)setDouble:(<span class="keyword">double</span>)value forKey:(<span class="built_in">NSString</span> *)defaultName;</span><br><span class="line">- (<span class="keyword">void</span>)setBool:(<span class="built_in">BOOL</span>)value forKey:(<span class="built_in">NSString</span> *)defaultName;</span><br><span class="line"><span class="comment">//读取</span></span><br><span class="line">- (<span class="built_in">NSInteger</span>)integerForKey:(<span class="built_in">NSString</span> *)defaultName;</span><br><span class="line">- (<span class="keyword">float</span>)floatForKey:(<span class="built_in">NSString</span> *)defaultName;</span><br><span class="line">- (<span class="keyword">double</span>)doubleForKey:(<span class="built_in">NSString</span> *)defaultName;</span><br><span class="line">- (<span class="built_in">BOOL</span>)boolForKey:(<span class="built_in">NSString</span> *)defaultName;</span><br></pre></td></tr></table></figure>
+<h2 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h2><p>数据库这里想简单介绍一下 FMDB 第三方库。FMDB 是 iOS 平台的SQLite 数据库框架，它是封装了 SQLite 的 C语言 API。</p>
+<p>主要有三个类：  </p>
+<ul>
+<li>FMDatabase （用来执行SQL）</li>
+<li>FMResultSet (查询结果集)</li>
+<li>FMDatabaseQueue (多线程中执行操作，线程安全)  </li>
+</ul>
+<p><strong><em>1.封装成工具类</em></strong>  </p>
+<p>FMDBTools.h </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span></span></span><br><span class="line"><span class="meta">#import <span class="meta-string">"FMDatabase.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">FMDBTools</span> : <span class="title">NSObject</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">strong</span>,<span class="keyword">nonatomic</span>) FMDatabase *fmdb;</span><br><span class="line"></span><br><span class="line">+ (<span class="keyword">instancetype</span>) shareFMDBTools;</span><br><span class="line"></span><br><span class="line"><span class="comment">//打开数据库</span></span><br><span class="line">- (<span class="keyword">void</span>) fmDatabaseOpen;</span><br><span class="line"></span><br><span class="line"><span class="comment">//关闭数据库</span></span><br><span class="line">- (<span class="keyword">void</span>) fmDatabaseClose;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>FMDBTools.m</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">"FMDBTools.h"</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">FMDBTools</span></span></span><br><span class="line"></span><br><span class="line">+ (<span class="keyword">instancetype</span>) shareFMDBTools &#123;</span><br><span class="line">    <span class="keyword">static</span> FMDBTools *shareFMDBTools = <span class="literal">nil</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> predicate;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">dispatch_once</span>(&amp;predicate, ^&#123;</span><br><span class="line">        shareFMDBTools = [[<span class="keyword">self</span> alloc] init];</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> shareFMDBTools;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (FMDatabase *) fmdb &#123;</span><br><span class="line">    <span class="keyword">if</span>(!_fmdb)&#123;</span><br><span class="line"><span class="comment">//        NSString * doc = PATH_OF_DOCUMENT;</span></span><br><span class="line"><span class="comment">//        NSString * path = [doc stringByAppendingPathComponent:DATABASE_PATH];</span></span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"databaseWithPath - %@"</span>,DATABASE_PATH);</span><br><span class="line">        _fmdb = [FMDatabase databaseWithPath:DATABASE_PATH];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> _fmdb;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>) fmDatabaseClose&#123;</span><br><span class="line">    [<span class="keyword">self</span>.fmdb close];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>) fmDatabaseOpen&#123;</span><br><span class="line">    [<span class="keyword">self</span>.fmdb open];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p><strong><em>2.建立数据库</em></strong> </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>) createXXXTable&#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">NSFileManager</span> * fileManager = [<span class="built_in">NSFileManager</span> defaultManager];</span><br><span class="line">    <span class="keyword">if</span> ([fileManager fileExistsAtPath:DATABASE_PATH] == <span class="literal">NO</span>) &#123;</span><br><span class="line">        <span class="comment">// create table</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> ([[FMDBTools shareFMDBTools].fmdb open]) &#123;</span><br><span class="line">            <span class="built_in">NSString</span> * sql = <span class="string">@"CREATE TABLE 'tb_videostatus' ('id' INTEGER PRIMARY KEY AUTOINCREMENT  NOT NULL , 'userId' INTEGER, 'status' INTEGER NOT NULL DEFAULT 0,)"</span>;</span><br><span class="line">            <span class="built_in">BOOL</span> res = [[FMDBTools shareFMDBTools].fmdb executeUpdate:sql];</span><br><span class="line">            <span class="keyword">if</span> (!res) &#123;</span><br><span class="line">                <span class="built_in">NSLog</span>(<span class="string">@"error when creating db table"</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="built_in">NSLog</span>(<span class="string">@"succ to creating db table"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            [[FMDBTools shareFMDBTools].fmdb  close];</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">NSLog</span>(<span class="string">@"error when open db"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"数据库已存在!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong><em>3.数据库操作</em></strong>  </p>
+<p>插入</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ([[FMDBTools shareFMDBTools].fmdb open]) &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>([<span class="keyword">self</span> queryVideoStatusTableWithVideoId:videoId CourseId:courseId UserId:userId])&#123;</span><br><span class="line">            [[FMDBTools shareFMDBTools].fmdb close];</span><br><span class="line">            <span class="keyword">return</span> ;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">NSString</span> * sql = SQL插入语句</span><br><span class="line">        <span class="built_in">BOOL</span> res = [[FMDBTools shareFMDBTools].fmdb executeUpdate:sql];</span><br><span class="line">        <span class="keyword">if</span> (!res) &#123;</span><br><span class="line">            <span class="built_in">NSLog</span>(<span class="string">@"error to insert data"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">NSLog</span>(<span class="string">@"succ to insert data"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        [[FMDBTools shareFMDBTools].fmdb close];</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>更新  </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ([[FMDBTools shareFMDBTools].fmdb open]) &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">NSString</span> * sql = SQL更新语句;</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">BOOL</span> res = [[FMDBTools shareFMDBTools].fmdb executeUpdate:sql];</span><br><span class="line">        <span class="keyword">if</span> (!res) &#123;</span><br><span class="line">            <span class="built_in">NSLog</span>(<span class="string">@"error to update data"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">NSLog</span>(<span class="string">@"succ to update data"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        [[FMDBTools shareFMDBTools].fmdb close];</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>以上只是一些简单的数据库操作，关于多线程中的操作再之后的涉及到再做总结。  </p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>数据持久化对于 app 来说还是很重要的，设计一个合理的持久化方案可以让 app 体验更佳。总结的不恰当之处，还请见谅。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/iOS-开发笔记/">iOS 开发笔记</a>
+		  
+			<a href="/tags/数据持久化/">数据持久化</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2016/10/17/2016-10-17-Translate-Execution-States-for-Apps/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">［翻译］应用程序的执行状态</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2016/09/27/2016-09-27-iOS-Develop-notes-IAP/">
+        <span class="next-text nav-default">内购（in-app purchase）问题</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <div style="text-align:center;">
+        <button class="btn" id="load-disqus" onclick="disqus.load();">加载 Disqus 评论</button>
+    </div>
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2016 -
+    
+     
+    2019
+    <span class="footer-author">acumen1005.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+<script type="text/javascript">
+  var disqus_shortname = 'acumen1005';
+  var disqus_identifier = '2016/10/14/2016-10-14-Apple-save/';
+
+  var disqus_title = "iOS 数据持久化方案";
+
+
+  var disqus = {
+    load : function disqus(){
+        if(typeof DISQUS !== 'object') {
+          (function () {
+          var s = document.createElement('script'); s.async = true;
+          s.type = 'text/javascript';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+          }());
+          $('#load-disqus').remove(); ///加载后移除按钮
+        }
+    }
+  }
+
+  
+    var disqus_config = function () {
+        this.page.url = disqus_url;
+        this.page.identifier = disqus_identifier;
+        this.page.title = disqus_title;
+    };
+  
+
+</script>
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

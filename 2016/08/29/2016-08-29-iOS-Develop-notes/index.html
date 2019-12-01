@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="关于 NSArray 遍历 mutated 错误"/>
+
+
+
+
+  <meta name="keywords" content="iOS 开发笔记,NSArray," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="acumen1005">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2016/08/29/2016-08-29-iOS-Develop-notes/"/>
+
+
+<meta name="description" content="问题在开发过程中对于 NSArray 和 NSMutableArray 等的使用不当，出现crash，在最近的开发中对于枚举 sublayers 操作遇到这样的错误。   1Collection &amp;lt;__NSArrayM: 0xxxxxxx&amp;gt; was mutated while being enumerated. 字面意思就是－－集合（数组）在枚举时发生突变。同时对可变数组进行两种操作：">
+<meta name="keywords" content="iOS 开发笔记,NSArray">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于 NSArray 遍历 mutated 错误">
+<meta property="og:url" content="http://yoursite.com/2016/08/29/2016-08-29-iOS-Develop-notes/index.html">
+<meta property="og:site_name" content="acumen1005">
+<meta property="og:description" content="问题在开发过程中对于 NSArray 和 NSMutableArray 等的使用不当，出现crash，在最近的开发中对于枚举 sublayers 操作遇到这样的错误。   1Collection &amp;lt;__NSArrayM: 0xxxxxxx&amp;gt; was mutated while being enumerated. 字面意思就是－－集合（数组）在枚举时发生突变。同时对可变数组进行两种操作：">
+<meta property="og:updated_time" content="2018-04-20T05:16:45.775Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于 NSArray 遍历 mutated 错误">
+<meta name="twitter:description" content="问题在开发过程中对于 NSArray 和 NSMutableArray 等的使用不当，出现crash，在最近的开发中对于枚举 sublayers 操作遇到这样的错误。   1Collection &amp;lt;__NSArrayM: 0xxxxxxx&amp;gt; was mutated while being enumerated. 字面意思就是－－集合（数组）在枚举时发生突变。同时对可变数组进行两种操作：">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> 关于 NSArray 遍历 mutated 错误 - acumen1005 </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">acumen1005</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          关于 NSArray 遍历 mutated 错误
+        
+      </h1>
+      <h1 class="post-preview">
+      </h1>
+      <time class="post-time">
+          Aug 29 2016
+      </time>
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>在开发过程中对于 NSArray 和 NSMutableArray 等的使用不当，出现crash，在最近的开发中对于枚举 sublayers 操作遇到这样的错误。  </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Collection &lt;__NSArrayM: <span class="number">0</span>xxxxxxx&gt; was mutated <span class="keyword">while</span> being enumerated.</span><br></pre></td></tr></table></figure>
+<p>字面意思就是－－集合（数组）在枚举时发生突变。<br>同时对可变数组进行两种操作：枚举和内容修改（添加或者删除）。对于枚举器而言，容易已经改变了，很可能访问到未分配的内存空间。所以这样做是很危险的。  </p>
+<h1 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h1><p>在网上找了下这样的问题，自己也实践了下，发现要对操作的数组进行一次mutableCopy。 </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSMutableArray</span> *mutableArray = [[[<span class="built_in">NSMutableArray</span> alloc] initWithObjects:<span class="string">@"1"</span>,<span class="string">@"2"</span>,<span class="string">@"3"</span>,<span class="string">@"4"</span>, <span class="literal">nil</span>] mutableCopy];</span><br><span class="line">	<span class="comment">//NSMutableArray *mArray = mutableArray;</span></span><br><span class="line">    [mutableArray enumerateObjectsUsingBlock:^(<span class="keyword">id</span>  _Nonnull obj, <span class="built_in">NSUInteger</span> idx, <span class="built_in">BOOL</span> * _Nonnull stop) &#123;</span><br><span class="line">        [mutableArray removeObject:obj];</span><br><span class="line">    &#125;];</span><br></pre></td></tr></table></figure>
+<p>解决这里还有个疑惑 <em>UIView对象中的subviews成员，子视图removeFromSuperview时为什么不会有上述的问题</em>  </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UIView</span> *v1 = [[<span class="built_in">UIView</span> alloc] init];</span><br><span class="line">   <span class="built_in">UIView</span> *v2 = [[<span class="built_in">UIView</span> alloc] init];</span><br><span class="line">   <span class="built_in">UIView</span> *v3 = [[<span class="built_in">UIView</span> alloc] init];</span><br><span class="line">   <span class="built_in">UIView</span> *v4 = [[<span class="built_in">UIView</span> alloc] init];</span><br><span class="line">   </span><br><span class="line">   [v1 addSubview:v2];</span><br><span class="line">   [v1 addSubview:v3];</span><br><span class="line">   [v1 addSubview:v4];</span><br><span class="line">   </span><br><span class="line">   <span class="built_in">NSLog</span>(<span class="string">@"修改之前 － %@"</span>,v1.subviews);</span><br><span class="line">   </span><br><span class="line">   <span class="keyword">for</span> (<span class="built_in">UIView</span> *v <span class="keyword">in</span> v1.subviews) &#123;</span><br><span class="line">       <span class="keyword">if</span>(v == v3) &#123;</span><br><span class="line">           [v removeFromSuperview];</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   <span class="built_in">NSLog</span>(<span class="string">@"修改之后 － %@"</span>,v1.subviews);</span><br></pre></td></tr></table></figure>
+<p>以上述代码为例，其实修改前的v1.subviews对象和修改后的对象不是一个对象了，简单的说就是修改前后v1.subviews对象地址发生变化</p>
+<p>修改前  </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Printing description of v1-&gt;_subviewCache:</span><br><span class="line">&lt;__NSArrayM <span class="number">0x7a07f480</span>&gt;(</span><br><span class="line">&lt;<span class="built_in">UIView</span>: <span class="number">0x79e79c90</span>; frame = (<span class="number">0</span> <span class="number">0</span>; <span class="number">0</span> <span class="number">0</span>); layer = &lt;<span class="built_in">CALayer</span>: <span class="number">0x79e79b30</span>&gt;&gt;,</span><br><span class="line">&lt;<span class="built_in">UIView</span>: <span class="number">0x79e7aeb0</span>; frame = (<span class="number">0</span> <span class="number">0</span>; <span class="number">0</span> <span class="number">0</span>); layer = &lt;<span class="built_in">CALayer</span>: <span class="number">0x79e7fd60</span>&gt;&gt;,</span><br><span class="line">&lt;<span class="built_in">UIView</span>: <span class="number">0x79e7e660</span>; frame = (<span class="number">0</span> <span class="number">0</span>; <span class="number">0</span> <span class="number">0</span>); layer = &lt;<span class="built_in">CALayer</span>: <span class="number">0x79e78b60</span>&gt;&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>修改后  </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Printing description of v1-&gt;_subviewCache:</span><br><span class="line">&lt;__NSArrayM <span class="number">0x7a0af2d0</span>&gt;(</span><br><span class="line">&lt;<span class="built_in">UIView</span>: <span class="number">0x79e79c90</span>; frame = (<span class="number">0</span> <span class="number">0</span>; <span class="number">0</span> <span class="number">0</span>); layer = &lt;<span class="built_in">CALayer</span>: <span class="number">0x79e79b30</span>&gt;&gt;,</span><br><span class="line">&lt;<span class="built_in">UIView</span>: <span class="number">0x79e7e660</span>; frame = (<span class="number">0</span> <span class="number">0</span>; <span class="number">0</span> <span class="number">0</span>); layer = &lt;<span class="built_in">CALayer</span>: <span class="number">0x79e78b60</span>&gt;&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>到此问题解决了。虽然是一个小的问题。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/iOS-开发笔记/">iOS 开发笔记</a>
+		  
+			<a href="/tags/NSArray/">NSArray</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2016/09/27/2016-09-27-iOS-Develop-notes-IAP/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">内购（in-app purchase）问题</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2016/08/16/2016-08-16-NetEase-Interview/">
+        <span class="next-text nav-default">Netease Interview</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <div style="text-align:center;">
+        <button class="btn" id="load-disqus" onclick="disqus.load();">加载 Disqus 评论</button>
+    </div>
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2016 -
+    
+     
+    2019
+    <span class="footer-author">acumen1005.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+<script type="text/javascript">
+  var disqus_shortname = 'acumen1005';
+  var disqus_identifier = '2016/08/29/2016-08-29-iOS-Develop-notes/';
+
+  var disqus_title = "关于 NSArray 遍历 mutated 错误";
+
+
+  var disqus = {
+    load : function disqus(){
+        if(typeof DISQUS !== 'object') {
+          (function () {
+          var s = document.createElement('script'); s.async = true;
+          s.type = 'text/javascript';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+          }());
+          $('#load-disqus').remove(); ///加载后移除按钮
+        }
+    }
+  }
+
+  
+    var disqus_config = function () {
+        this.page.url = disqus_url;
+        this.page.identifier = disqus_identifier;
+        this.page.title = disqus_title;
+    };
+  
+
+</script>
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

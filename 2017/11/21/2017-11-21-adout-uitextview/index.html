@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="iOS11 之后 UITextView 更加难点了？"/>
+
+
+
+
+  <meta name="keywords" content="UIKit,UITextView," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="acumen1005">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2017/11/21/2017-11-21-adout-uitextview/"/>
+
+
+<meta name="description" content="在 iOS11 系统更新的推送之后，有大部分 iOS11 的用户反馈在 iOS11 的系统上 UITextView 的 link 很难点击打开。经过几番的测试和搜索终于几乎能稳定复现这个问题 —— UITextView  中的 link 难以点击。 由于历史原因，在 app 中一些复制、选择等操作的文本都是采用 UITextView 来实现的，然而这些 UITextView 是作为 UITable">
+<meta name="keywords" content="UIKit,UITextView">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS11 之后 UITextView 更加难点了？">
+<meta property="og:url" content="http://yoursite.com/2017/11/21/2017-11-21-adout-uitextview/index.html">
+<meta property="og:site_name" content="acumen1005">
+<meta property="og:description" content="在 iOS11 系统更新的推送之后，有大部分 iOS11 的用户反馈在 iOS11 的系统上 UITextView 的 link 很难点击打开。经过几番的测试和搜索终于几乎能稳定复现这个问题 —— UITextView  中的 link 难以点击。 由于历史原因，在 app 中一些复制、选择等操作的文本都是采用 UITextView 来实现的，然而这些 UITextView 是作为 UITable">
+<meta property="og:image" content="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fm4rd9jjvij20of05smyi.jpg">
+<meta property="og:updated_time" content="2018-04-20T05:23:31.022Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS11 之后 UITextView 更加难点了？">
+<meta name="twitter:description" content="在 iOS11 系统更新的推送之后，有大部分 iOS11 的用户反馈在 iOS11 的系统上 UITextView 的 link 很难点击打开。经过几番的测试和搜索终于几乎能稳定复现这个问题 —— UITextView  中的 link 难以点击。 由于历史原因，在 app 中一些复制、选择等操作的文本都是采用 UITextView 来实现的，然而这些 UITextView 是作为 UITable">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fm4rd9jjvij20of05smyi.jpg">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> iOS11 之后 UITextView 更加难点了？ - acumen1005 </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">acumen1005</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          iOS11 之后 UITextView 更加难点了？
+        
+      </h1>
+      <h1 class="post-preview">
+      </h1>
+      <time class="post-time">
+          Nov 21 2017
+      </time>
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>在 iOS11 系统更新的推送之后，有大部分 iOS11 的用户反馈在 iOS11 的系统上 UITextView 的 link 很难点击打开。经过几番的测试和搜索终于几乎能稳定复现这个问题 —— UITextView  中的 link 难以点击。</p>
+<p>由于历史原因，在 app 中一些复制、选择等操作的文本都是采用 UITextView 来实现的，然而这些 UITextView 是作为 UITableViewCell 的子视图。UITextView 作为复制、选择、高亮链接的控件还是不错的选择。在 iOS11 之后 UITextView 加入了新的交互操作 Drag &amp; Drop，高亮的链接和 Attchement 在长按几毫秒之后可以拖拽，这个操作之后发现点击链接变的难点了。其实这个只是一个表象而已，经过之后的尝试发现，其实 UITextView 中的高亮链接不是之前所理解 <code>轻触</code> 打开而是 <code>点击按压</code> 打开。所以你会发现在 iOS11 之后需要一个明显的 <code>点击并按压</code> 的过程才能打开链接，只是在 iOS11 之后这个过程不是那么的明显而已。然而怎么实现链接 <code>轻触</code> 打开呢？</p>
+<p>做了以下两种尝试：</p>
+<ol>
+<li>利用响应链来帮助我们找到需要点击的区域</li>
+<li>再 UITextView 上增加一个 tap (轻触)手势。通过手势的点击来获取本文信息</li>
+</ol>
+<p>方案 1 实现有一个问题就是我们很难模拟出系统的 upinside 这样的点击状态，所以我们一旦 touch 到高亮的 link 就会马上响应方法，甚至在我们滑动的时候 touch 到也会响应该方法，用户体验不好。<br>具体的实现可以查看： <a href="https://stackoverflow.com/questions/36198299/uitextview-disable-selection-allow-links/44878203#44878203" target="_blank" rel="noopener">https://stackoverflow.com/questions/36198299/uitextview-disable-selection-allow-links/44878203#44878203</a></p>
+<p>方案 2 的实现是可以接受的，具体的实现过程：<br>在 tap 手势的方法中 通过<code>locationInView</code> 方法获取在 UITextView 的点击坐标，再 <code>closestPositionToPoint</code> 方法获取坐标对应的文本位置，再通过 <code>textStylingAtPosition: inDirection</code> 获取点击附近所包含的文本信息，判断这个文本信息的字典中是否含有 NSLinkAttributeName key 所对应的值，如果有说明是我们需要的 Attachment，取出他的值就是我们需要打开的 url。</p>
+<p><img src="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fm4rd9jjvij20of05smyi.jpg" alt=""></p>
+<p>最后讲一点，在 iOS11 之前，点击事件能穿透 UITextView 响应 <code>tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)</code> 代理方法，当然，这里需要设置 UITextView 的 selectable = true 和 isUserInteractionEnabled = false。但是在 iOS11 之后不能响应该代理方法了。</p>
+<p>源码的 examples： <a href="https://github.com/acumen1005/Examples" target="_blank" rel="noopener">https://github.com/acumen1005/Examples</a></p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/UIKit/">UIKit</a>
+		  
+			<a href="/tags/UITextView/">UITextView</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/01/18/2018-01-18-adaption-ios11/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">iOS11 适配问题</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/02/15/2017-02-15-async/">
+        <span class="next-text nav-default">由一个问题引发的思考－异步编程</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <div style="text-align:center;">
+        <button class="btn" id="load-disqus" onclick="disqus.load();">加载 Disqus 评论</button>
+    </div>
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2016 -
+    
+     
+    2019
+    <span class="footer-author">acumen1005.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+<script type="text/javascript">
+  var disqus_shortname = 'acumen1005';
+  var disqus_identifier = '2017/11/21/2017-11-21-adout-uitextview/';
+
+  var disqus_title = "iOS11 之后 UITextView 更加难点了？";
+
+
+  var disqus = {
+    load : function disqus(){
+        if(typeof DISQUS !== 'object') {
+          (function () {
+          var s = document.createElement('script'); s.async = true;
+          s.type = 'text/javascript';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+          }());
+          $('#load-disqus').remove(); ///加载后移除按钮
+        }
+    }
+  }
+
+  
+    var disqus_config = function () {
+        this.page.url = disqus_url;
+        this.page.identifier = disqus_identifier;
+        this.page.title = disqus_title;
+    };
+  
+
+</script>
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

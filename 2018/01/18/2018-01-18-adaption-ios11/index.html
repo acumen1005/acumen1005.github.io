@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="iOS11 适配问题"/>
+
+
+
+
+  <meta name="keywords" content="iOS 11,safe area,适配," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="acumen1005">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2018/01/18/2018-01-18-adaption-ios11/"/>
+
+
+<meta name="description" content="文章介绍在 iOS11 上的一些变化，主要关于 navigation bar、safe area、UIScrollView 的变化和一些适配的方法。 Safe Area主要关心一个 safeArea (安全区域) 的问题。以下是 Apple 给出安全区域的定义：  The safe area of a view reflects the area not covered by navigation">
+<meta name="keywords" content="iOS 11,safe area,适配">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS11 适配问题">
+<meta property="og:url" content="http://yoursite.com/2018/01/18/2018-01-18-adaption-ios11/index.html">
+<meta property="og:site_name" content="acumen1005">
+<meta property="og:description" content="文章介绍在 iOS11 上的一些变化，主要关于 navigation bar、safe area、UIScrollView 的变化和一些适配的方法。 Safe Area主要关心一个 safeArea (安全区域) 的问题。以下是 Apple 给出安全区域的定义：  The safe area of a view reflects the area not covered by navigation">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/934b5ef8gy1fn96scjy8sj20i70bw3zd.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fn97x3iztej20a805rdg8.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fnah2sysswj209y06q3yw.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fndnf0ud8sj20a709d3z3.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fndnfm8qz9j20bn0b5my4.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fndnqx9v0vj209a02naae.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fndnre9witj209801rwen.jpg">
+<meta property="og:updated_time" content="2018-04-20T05:23:46.185Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS11 适配问题">
+<meta name="twitter:description" content="文章介绍在 iOS11 上的一些变化，主要关于 navigation bar、safe area、UIScrollView 的变化和一些适配的方法。 Safe Area主要关心一个 safeArea (安全区域) 的问题。以下是 Apple 给出安全区域的定义：  The safe area of a view reflects the area not covered by navigation">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/934b5ef8gy1fn96scjy8sj20i70bw3zd.jpg">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> iOS11 适配问题 - acumen1005 </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">acumen1005</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          iOS11 适配问题
+        
+      </h1>
+      <h1 class="post-preview">
+      </h1>
+      <time class="post-time">
+          Jan 18 2018
+      </time>
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>文章介绍在 iOS11 上的一些变化，主要关于 navigation bar、safe area、UIScrollView 的变化和一些适配的方法。</p>
+<h1 id="Safe-Area"><a href="#Safe-Area" class="headerlink" title="Safe Area"></a>Safe Area</h1><p>主要关心一个 safeArea (安全区域) 的问题。以下是 Apple 给出安全区域的定义：</p>
+<blockquote>
+<p>The safe area of a view reflects the area not covered by navigation bars, tab bars, toolbars, and other ancestors that obscure a view controller’s view.</p>
+</blockquote>
+<p><img src="http://ww1.sinaimg.cn/large/934b5ef8gy1fn96scjy8sj20i70bw3zd.jpg" alt=""></p>
+<p>简单的来说，安全区域就是不包括 navigtionBar、tabBar、 toolBar 等的区域。我们主要介绍在 iOS11 中 UIView 新增 safeAreaInsets 和 safeAreaLayoutGuide。<br>在 iOS11 之前是由 topLayoutGuide 和 bottomLayoutGuide 来控制屏幕垂直内容的最大区域。之后，统一成 safeAreaLayoutGuide。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> safeAreaLayoutGuide: <span class="type">UILayoutGuide</span> &#123; <span class="keyword">get</span> &#125;</span><br></pre></td></tr></table></figure>
+<p>safeAreaLayoutGuide 表示在试图没有被 bars 遮掩住的部分，它一下几个特点：</p>
+<ol>
+<li>UIView 的一个只读属性。</li>
+<li>可以通过设置 view 所在的 UIViewController 的<code>additionalSafeAreaInsets</code>属性来增加或者缩小区域</li>
+<li>子试图的 safeAreaLayoutGuide 和父试图的关系是取交集。也就是说如果子试图完全在父试图内，那么 safeAreaLayoutGuide 的区域和 view 本身一样大。</li>
+</ol>
+<p>我们在用 xib 或者 storyboard 的时候就比较清楚的了解 safeAreaLayoutGuide</p>
+<p>iOS11 之前的结构，为了防止我们的视图被 NavigtionBar 和 tabBar 覆盖所以我们的布局上下以 TopLayoutGuide 和 BottomLayoutGuide 参考。<br><img src="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fn97x3iztej20a805rdg8.jpg" alt=""></p>
+<p>iOS11 之后的结构，这里的 Safe Area 就是 safeAreaLayoutGuide， 我们可以看作一个 view ，苹果鼓励我们在这个区域内绘制所有的内容。<br><img src="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fnah2sysswj209y06q3yw.jpg" alt=""></p>
+<p>以上的 layoutGuide 都是只读的，但是我们可以通过 <code>additionalSafeAreaInsets</code> 属性增加或者减少安全区域的大小。当一个 view 的安全区域发生变化的时候可以通过 <code>viewSafeAreaInsetsDidChange</code> 方法来获取 insets，并且改变安全区域的 insets 会触发 <code>viewDidLayoutSubviews</code> 方法，视图布局会强制刷新。<br>值得注意的是，在 <code>viewDidLoad</code> 中读取 <code>safeAreaInsets</code> 的值是 0，我们知道在 <code>viewDidLoad</code> 的时候，其实 viewController 的 view 还没还是布局，自然与布局相关的属性还没有值， 所以我们需要在 <code>viewWillLayoutSubviews</code> 或者 <code>viewDidLayoutSubviews</code> 中读取。</p>
+<h1 id="UINavigtionBar"><a href="#UINavigtionBar" class="headerlink" title="UINavigtionBar"></a>UINavigtionBar</h1><p>navigtion bar 最大的不同就是在 iOS11 上导航栏的图层结构改变了，在 navigtion bar 上集成 UISearchController、大标题。</p>
+<ul>
+<li><p>大标题<br>增加大标题的显示，默认是不开启的，可以通过 <code>UINavigationBar.prefersLargeTitles</code> 属性来控制大标题是否显示。</p>
+  <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@property (nonatomic, readwrite, assign) <span class="type">UINavigationItemLargeTitleDisplayMode</span> largeTitleDisplayMode</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这是一个枚举类型的属性，分别是 <code>.automatic</code>、<code>.always</code>、<code>.never</code> 三种类型。</p>
+<pre><code>- automatic， 开启自动模式，large title 依赖上一个图层的 item
+- always，当前 item 达到顶部的时候总是显示大标题
+- never，不显示大标题
+</code></pre><ul>
+<li><p>集成 UISearchController<br>  增加了一下两个属性，只需要将 UISearchController 赋值给 navigationItem 就可以实现一个带有 UISearchController 的 navigation bar。<code>hidesSearchBarWhenScrolling</code> 来控制是否随着滚动消失。</p>
+  <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@property (nonatomic, retain, nullable) <span class="type">UISearchController</span> *searchController </span><br><span class="line"></span><br><span class="line">@property (nonatomic) <span class="type">BOOL</span> hidesSearchBarWhenScrolling</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>navigation bar 的结构<br>  iOS11 之后的 UINavigtionBar 结构<br>  <img src="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fndnf0ud8sj20a709d3z3.jpg" alt=""></p>
+<p>  iOS11 之前的 UINavigtionBar 结构<br>  <img src="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fndnfm8qz9j20bn0b5my4.jpg" alt=""></p>
+<p>  我们可以用 lldb 调试命令来看 UINavigtionBar 的视图结构的变化，在 iOS11 中增加了：</p>
+<ol>
+<li>UINavigationBarLargeTitleView 大标题</li>
+<li><p>UISearchBar 搜索框</p>
+<p>从截图中可以看到一个带 <code>_</code> 的私有属性的变化，在项目中 UINavigtionBar 随着滚动改变透明度，在 iOS11 之后发生 crash 就是因为我们需要设置这些私有属性的同透明度，而这些属性在 iOS11 之后发生了变化，导致强制解包失败。</p>
+<p>iOS11 之后的 UINavigtionBar 视图层级结构<br><img src="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fndnqx9v0vj209a02naae.jpg" alt=""></p>
+<p>iOS11 之前的 UINavigationBar 视图层级结构<br><img src="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fndnre9witj209801rwen.jpg" alt=""></p>
+<p>含有 LargeTitleView 的 UINavigtionBar 的高度变成了 116 (状态栏20 + 导航栏44 + 大标题52)。当我们没有给 LargeTitleView 赋值，_UINavigationBarLargeTitleView 是添加在 _UINavigationBarContentView 上的；赋值之后，则系统会生成一个 _UITAMICAdaptorView 来承载整个 TitleView。 在 iphoneX 的设备上状态栏变为 44 (其中’刘海’的高度是 24)。</p>
+<p>在 UINavigtionBar 上添加 leftBarButtonItem/rightButtonItem 或者 UISearchBar 会发现这些视图的 frame 或者 size 变得很奇怪。我们需要注意的是 Item 的大小和 frame 避免是 0，需要给视图一个 frame、约束或者重载 intrinsicContentSize 方法。</p>
+<p>在我们在 iOS11 UINavigationBar 结构图中看到在会给 leftBarButtonItem/rightButtonItem 包一层 _UIButtonBarStackView，所以我们设置视图的 frame 会失效，需要用 AutoLayout 来约束这些视图。</p>
+</li>
+</ol>
+</li>
+</ul>
+<p>在 navigation bar 上增加 item 的注意事项：</p>
+<ul>
+<li>避免 item 的视图大小为 0</li>
+<li>重载 intrinsicContentSize 方法</li>
+<li>用 autolayout 来约束 item</li>
+</ul>
+<h1 id="UITableView-和-UICollectionView-的变化"><a href="#UITableView-和-UICollectionView-的变化" class="headerlink" title="UITableView 和 UICollectionView 的变化"></a>UITableView 和 UICollectionView 的变化</h1><p>在 iOS11 之前，我们希望 UITableView 全屏幕显示不依赖 navigation bar 和 tab bar 来调整 insets，我们会将 <code>automaticallyAdjustsScrollViewInsets</code> 这个属性设置为 NO，默认是 YES。以下是 Apple Documentation 的描述</p>
+<blockquote>
+<p>A Boolean value that indicates whether the view controller should automatically adjust its scroll view insets.<br>The default value of this property is YES, which lets container view controllers know that they should adjust the scroll view insets of this view controller’s view to account for screen areas consumed by a status bar, search bar, navigation bar, toolbar, or tab bar. Set this property to NO if your view controller implementation manages its own scroll view inset adjustments.</p>
+</blockquote>
+<p>大致的意思是讲 如果将 <code>automaticallyAdjustsScrollViewInsets</code> 设置为 YES，scrollView 的 insets 会根据屏幕中的 status bar, search bar, navigation bar, toolbar 等来调整。<br>但是这个属性在 iOS11 之后被遗弃了，取而代之的是 UIViewController 的 contentInsetAdjustmentBehavior </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typedef <span class="type">NS_ENUM</span>(<span class="type">NSInteger</span>, <span class="type">UIScrollViewContentInsetAdjustmentBehavior</span>) &#123;</span><br><span class="line">    <span class="type">UIScrollViewContentInsetAdjustmentAutomatic</span>, <span class="comment">// Similar to .scrollableAxes, but for backward compatibility will also adjust the top &amp; bottom contentInset when the scroll view is owned by a view controller with automaticallyAdjustsScrollViewInsets = YES inside a navigation controller, regardless of whether the scroll view is scrollable</span></span><br><span class="line">    <span class="type">UIScrollViewContentInsetAdjustmentScrollableAxes</span>, <span class="comment">// Edges for scrollable axes are adjusted (i.e., contentSize.width/height &gt; frame.size.width/height or alwaysBounceHorizontal/Vertical = YES)</span></span><br><span class="line">    <span class="type">UIScrollViewContentInsetAdjustmentNever</span>, <span class="comment">// contentInset is not adjusted</span></span><br><span class="line">    <span class="type">UIScrollViewContentInsetAdjustmentAlways</span>, <span class="comment">// contentInset is always adjusted by the scroll view's safeAreaInsets</span></span><br><span class="line">&#125; <span class="type">API_AVAILABLE</span>(ios(<span class="number">11.0</span>),tvos(<span class="number">11.0</span>));</span><br></pre></td></tr></table></figure>
+<p>设置为 UIScrollViewContentInsetAdjustmentNever，表示不调整 contentInset，与 automaticallyAdjustsScrollViewInsets = NO 的效果一样。</p>
+<h1 id="UITableView-默认使用-Self-Sizing"><a href="#UITableView-默认使用-Self-Sizing" class="headerlink" title="UITableView 默认使用 Self-Sizing"></a>UITableView 默认使用 Self-Sizing</h1><p>项目中的 UITableView 如果没有使用 Self-Sizing 特性，需要将 <code>estimatedRowHeight</code>、<code>estimatedSectionFooterHeight</code>、<code>estimatedSectionHeaderHeight</code>，这三个预估高度设置为一个 0，则会关闭估算高度的特性。</p>
+<h1 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h1><blockquote>
+<p><a href="https://github.com/stackhou/iOS11-Adaptation" target="_blank" rel="noopener">https://github.com/stackhou/iOS11-Adaptation</a></p>
+</blockquote>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/iOS-11/">iOS 11</a>
+		  
+			<a href="/tags/safe-area/">safe area</a>
+		  
+			<a href="/tags/适配/">适配</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/03/12/2017-05-16-project-summary/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">项目总结（一）</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/11/21/2017-11-21-adout-uitextview/">
+        <span class="next-text nav-default">iOS11 之后 UITextView 更加难点了？</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <div style="text-align:center;">
+        <button class="btn" id="load-disqus" onclick="disqus.load();">加载 Disqus 评论</button>
+    </div>
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2016 -
+    
+     
+    2019
+    <span class="footer-author">acumen1005.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+<script type="text/javascript">
+  var disqus_shortname = 'acumen1005';
+  var disqus_identifier = '2018/01/18/2018-01-18-adaption-ios11/';
+
+  var disqus_title = "iOS11 适配问题";
+
+
+  var disqus = {
+    load : function disqus(){
+        if(typeof DISQUS !== 'object') {
+          (function () {
+          var s = document.createElement('script'); s.async = true;
+          s.type = 'text/javascript';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+          }());
+          $('#load-disqus').remove(); ///加载后移除按钮
+        }
+    }
+  }
+
+  
+    var disqus_config = function () {
+        this.page.url = disqus_url;
+        this.page.identifier = disqus_identifier;
+        this.page.title = disqus_title;
+    };
+  
+
+</script>
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

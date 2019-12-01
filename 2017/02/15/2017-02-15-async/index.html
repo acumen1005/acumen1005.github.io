@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="由一个问题引发的思考－异步编程"/>
+
+
+
+
+  <meta name="keywords" content="异步编程,Promise,PromiseKit,源码分析," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="acumen1005">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2017/02/15/2017-02-15-async/"/>
+
+
+<meta name="description" content="解释下，题目好像取的有点大了，异步编程… 文章的内容涉及一个问题和 PromiseKit 的源码分析。 由一个问题引发的思考。我们在操作一系列的网络请求并且这些网络请求之前存在依赖关系。比如：    用户登陆完之后服务端返回 token 获取用户的联系人的列表（需要 token 认证）  以上两个网络请求中间就涉及到 token 衔接，我们很容易想到这个问题，通过一次嵌套就能完成。 1234567">
+<meta name="keywords" content="异步编程,Promise,PromiseKit,源码分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="由一个问题引发的思考－异步编程">
+<meta property="og:url" content="http://yoursite.com/2017/02/15/2017-02-15-async/index.html">
+<meta property="og:site_name" content="acumen1005">
+<meta property="og:description" content="解释下，题目好像取的有点大了，异步编程… 文章的内容涉及一个问题和 PromiseKit 的源码分析。 由一个问题引发的思考。我们在操作一系列的网络请求并且这些网络请求之前存在依赖关系。比如：    用户登陆完之后服务端返回 token 获取用户的联系人的列表（需要 token 认证）  以上两个网络请求中间就涉及到 token 衔接，我们很容易想到这个问题，通过一次嵌套就能完成。 1234567">
+<meta property="og:image" content="http://ww2.sinaimg.cn/mw690/934b5ef8jw1fcr0u0gcxwj20ns0f30t6.jpg">
+<meta property="og:updated_time" content="2018-04-20T05:23:13.364Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="由一个问题引发的思考－异步编程">
+<meta name="twitter:description" content="解释下，题目好像取的有点大了，异步编程… 文章的内容涉及一个问题和 PromiseKit 的源码分析。 由一个问题引发的思考。我们在操作一系列的网络请求并且这些网络请求之前存在依赖关系。比如：    用户登陆完之后服务端返回 token 获取用户的联系人的列表（需要 token 认证）  以上两个网络请求中间就涉及到 token 衔接，我们很容易想到这个问题，通过一次嵌套就能完成。 1234567">
+<meta name="twitter:image" content="http://ww2.sinaimg.cn/mw690/934b5ef8jw1fcr0u0gcxwj20ns0f30t6.jpg">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> 由一个问题引发的思考－异步编程 - acumen1005 </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">acumen1005</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          由一个问题引发的思考－异步编程
+        
+      </h1>
+      <h1 class="post-preview">
+      </h1>
+      <time class="post-time">
+          Feb 15 2017
+      </time>
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>解释下，题目好像取的有点大了，异步编程… 文章的内容涉及一个问题和 PromiseKit 的源码分析。</p>
+<p>由一个问题引发的思考。我们在操作一系列的网络请求并且这些网络请求之前存在依赖关系。比如：  </p>
+<ol>
+<li>用户登陆完之后服务端返回 token</li>
+<li>获取用户的联系人的列表（需要 token 认证）</li>
+</ol>
+<p>以上两个网络请求中间就涉及到 token 衔接，我们很容易想到这个问题，通过一次嵌套就能完成。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">APICilent</span>.login(url: <span class="string">"https://xxxx/api/login"</span>, params: paramDict, compelationHandler: &#123;result, reponse, error <span class="keyword">in</span> </span><br><span class="line">	<span class="keyword">if</span> <span class="keyword">let</span> token = result[<span class="string">"token"</span>] &#123;</span><br><span class="line">		<span class="type">APICilent</span>.fetchContact(url: <span class="string">"https://xxxx/api/contact"</span>, params: paramDict, compelationHandler:&#123;result, reponse, error <span class="keyword">in</span></span><br><span class="line">			<span class="keyword">if</span> <span class="keyword">let</span> result = result &#123;</span><br><span class="line">		</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="comment">// error</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="comment">// error</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>此时我们只有两个依赖请求，如果这样的请求很多个的话，我们就陷入了回调地狱（也就是出现大量的 <code>}</code> 这样的符号）在 else 中无法看清是哪个对应关系。这样的代码既不美观也很难维护。这个问题在最早发生在 JavaScript，所以我们有时看到原生的 JavaScript 代码中就含有大量的这样的 ‘又臭又长’ 的代码。<br>但是在 Cocoa 框架中好像没有很好的解决方法。直到有一天，我看到 ES6 的新特性 Promise。</p>
+<blockquote>
+<p>Promise 是异步编程的一种解决方案。<br>所谓Promise，简单说就是一个容器，里面保存着某个未来才会结束的事件（通常是一个异步操作）的结果</p>
+</blockquote>
+<p>Promise 对象有两个特点：</p>
+<ul>
+<li>对象的状态不受外界影响。Promise 对象代表一个异步操作，有三种状态，只有异步操作可以决定哪种状态，其他操作无法改变这个状态。<ul>
+<li>Pending 进行中</li>
+<li>Resolve 已完成，又称 Fulfill</li>
+<li>Rejected 已失败 </li>
+</ul>
+</li>
+<li>一旦状态改变，就不会再变，任何时候都可以得到这个结果。Promise 对象的状态改变只有两种可能：<ul>
+<li>Pending 变为 Resolved</li>
+<li>Pending变为 Rejected  </li>
+</ul>
+</li>
+</ul>
+<h2 id="then-方法"><a href="#then-方法" class="headerlink" title="then 方法"></a>then 方法</h2><p> Promise 对象的一个方法 <code>then</code> 它为 Promise 添加一个回调函数，<code>then</code> 方法返回一个新的 Promise 实例，因此可以采用链式写法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">getJSON(<span class="string">"/post/1.json"</span>).then(<span class="function"><span class="keyword">function</span>(<span class="params">post</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> getJSON(post.commentURL);</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> <span class="title">funcA</span>(<span class="params">comments</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"Resolved: "</span>, comments);</span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> <span class="title">funcB</span>(<span class="params">err</span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"Rejected: "</span>, err);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="catch-方法"><a href="#catch-方法" class="headerlink" title="catch 方法"></a>catch 方法</h2><p>catch 方法是 then 方法的一个别名，用于发生错误时的回调函数，如果异步操作抛出异常，状态就会变成 Rejected，就会调用 catch 方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">getJSON(<span class="string">"/posts.json"</span>).then(<span class="function"><span class="keyword">function</span>(<span class="params">posts</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params">error</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 处理 getJSON 和 前一个回调函数运行时发生的错误</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'发生错误！'</span>, error);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>以上是简单的介绍了一下 Promise，在 OC 和 Swift 中也有类似的第三方库 —— PromiseKit。基本的思想与 Promise 相似，也有 <code>Pending</code>、<code>Resolved</code>、<code>Rejected</code> 三个状态，同样有 <code>then</code>、<code>catch</code> 等等，但是在 PromiseKit 框架中还有 <code>always</code> 方法（在一次请求中总是执行的方法）。<br>接下来我们看看使用 PromiseKit 是如何优化多个依赖请求的（这里的优化指的是在代码结构上上的优化，并非性能上的优化）。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> url = <span class="type">URLRequest</span>(url: <span class="type">URL</span>(string: <span class="string">"https://httpbin.org/ip"</span>)!)</span><br><span class="line">        </span><br><span class="line">        <span class="type">Alamofire</span>.request(url).responseJSON().then &#123; json <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"token = \(json)"</span>)</span><br><span class="line">        </span><br><span class="line">            <span class="keyword">let</span> param = <span class="keyword">self</span>.parseJson(json)</span><br><span class="line">            <span class="keyword">return</span> <span class="type">AnyPromise</span>(<span class="keyword">self</span>.login(param))</span><br><span class="line">            </span><br><span class="line">            &#125;.then &#123; data <span class="keyword">in</span></span><br><span class="line">                <span class="built_in">print</span>(<span class="string">"login = \(data!)"</span>)</span><br><span class="line">            &#125;.<span class="keyword">catch</span> &#123; error <span class="keyword">in</span></span><br><span class="line">                <span class="built_in">print</span>(<span class="string">"error"</span>)</span><br><span class="line">        &#125;;</span><br></pre></td></tr></table></figure>
+<p>从上面的代码来看，回调地狱就解决了，没有那么多的 <code>}</code> ，并且代码的结构和可读性也增强了。PromiseKit 在各个异步操作间传递的是 Promise 对象，对应着各个层级的异步操作方法 <code>then</code> 。我们来简单分析下源码。</p>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码-1</span></span><br><span class="line"><span class="keyword">let</span> url = <span class="type">URLRequest</span>(url: <span class="type">URL</span>(string: <span class="string">"https://httpbin.org/ip"</span>)!)</span><br><span class="line">        </span><br><span class="line"><span class="type">Alamofire</span>.request(url).responseJSON().then &#123; json <span class="keyword">in</span></span><br><span class="line">	<span class="built_in">print</span>(<span class="string">"token = \(json)"</span>)</span><br><span class="line">&#125;.<span class="keyword">catch</span> &#123; error <span class="keyword">in</span></span><br><span class="line">	<span class="built_in">print</span>(<span class="string">"error = \(error)"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://ww2.sinaimg.cn/mw690/934b5ef8jw1fcr0u0gcxwj20ns0f30t6.jpg" alt=""></p>
+<p>PromiseKit 框架的中的主要类：  </p>
+<ul>
+<li>Promise</li>
+<li>State</li>
+</ul>
+<p>State 还有两个子类 SealedState 和 UnealedState。<br>我们在使用该框架前，需要去封装一些方法，比如 Alamofire 网络库，我们就需要做以下的封装。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码-2</span></span><br><span class="line">    <span class="comment">/// Adds a handler to be called once the request has finished.</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">responseJSON</span><span class="params">(<span class="number">_</span> options: JSONSerialization.ReadingOptions = .allowFragments)</span></span> -&gt; <span class="type">Promise</span>&lt;<span class="type">Any</span>&gt; &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="type">Promise</span> &#123; fulfill, reject <span class="keyword">in</span></span><br><span class="line">            responseJSON(queue: <span class="literal">nil</span>, options: options, completionHandler: &#123; response <span class="keyword">in</span></span><br><span class="line">                <span class="keyword">switch</span> response.result &#123;</span><br><span class="line">                <span class="keyword">case</span> .success(<span class="keyword">let</span> value):</span><br><span class="line">                    fulfill(value)</span><br><span class="line">                <span class="keyword">case</span> .failure(<span class="keyword">let</span> error):</span><br><span class="line">                    reject(error)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p> <code>responseJSON()</code> 是 Alamofire 请求的结果回调函数，这里我们扩展这些回调函数，并返回一个 <code>Promise&lt;Any&gt;</code> 。方法的实现中实例化一个 Promise 对象，<code>fulfill</code> 和 <code>reject</code> 请求成功回调、失败回调。然后根据请求的结果来调用相应的闭包。这里 <code>case .success(let value)</code> 作为模式匹配来取得请求成功的数据；相应的， <code>case .failure(let error)</code> 获取错误的信息。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码-3</span></span><br><span class="line"><span class="keyword">required</span> <span class="keyword">public</span> <span class="keyword">init</span>(resolvers: (<span class="number">_</span> fulfill: @escaping (<span class="type">T</span>) -&gt; <span class="type">Void</span>, <span class="number">_</span> reject: @escaping (<span class="type">Error</span>) -&gt; <span class="type">Void</span>) <span class="keyword">throws</span> -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> resolve: ((<span class="type">Resolution</span>&lt;<span class="type">T</span>&gt;) -&gt; <span class="type">Void</span>)!</span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            state = <span class="type">UnsealedState</span>(resolver: &amp;resolve)</span><br><span class="line">            <span class="keyword">try</span> resolvers(&#123;</span><br><span class="line">                resolve(.fulfilled($<span class="number">0</span>))</span><br><span class="line">            &#125;, &#123; error <span class="keyword">in</span></span><br><span class="line">                #<span class="keyword">if</span> !<span class="type">PMKDisableWarnings</span></span><br><span class="line">                    <span class="keyword">if</span> <span class="keyword">self</span>.isPending &#123;</span><br><span class="line">                        resolve(<span class="type">Resolution</span>(error))</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="type">NSLog</span>(<span class="string">"PromiseKit: warning: reject called on already rejected Promise: \(error)"</span>)</span><br><span class="line">                    &#125;</span><br><span class="line">                #<span class="keyword">else</span></span><br><span class="line">                    resolve(<span class="type">Resolution</span>(error))</span><br><span class="line">                #endif</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">            resolve(<span class="type">Resolution</span>(error))</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>从函数签名来看是一个构造函数，创建一个 pending 状态的 Promise 对象， <code>fulfill</code> 和 <code>reject</code> 一个元组作为参数，其中初始化了一个成员变量 <code>state</code> ，<code>UnsealedState(resolver:)</code> 传递一个 inout 类型也就是引用类型变量，<code>resolve</code> 闭包是将任务结果传递给 <code>state</code> 变量，来处理任务状态的变化。这一步非常重要，也就是我们之前所说的 Promise 的状态转移（pending 转变到 fulfill 或者 reject，后边我们再讲述 <code>state</code> 中的代码）。这里的 <code>.fulfilled($0)</code> 也就是我们 <em>代码－2</em> 中 value 值。将 value 值也就是成功的数据做一层包装，说明该值处于成功状态，并且成功状态的数据是 $0 。第二个回调是失败的状态，如果现在 Promise 的状态是是 Pending 说明任务还没解决，如果进入这个判断里，说明任务失败，比如网络请求失败。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码-4</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UnsealedState</span>&lt;<span class="title">T</span>&gt;: <span class="title">State</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">fileprivate</span> <span class="keyword">let</span> barrier = <span class="type">DispatchQueue</span>(label: <span class="string">"org.promisekit.barrier"</span>, attributes: .concurrent)</span><br><span class="line">    <span class="keyword">fileprivate</span> <span class="keyword">var</span> seal: <span class="type">Seal</span>&lt;<span class="type">T</span>&gt;</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">required</span> <span class="keyword">init</span>(resolver: <span class="keyword">inout</span> ((<span class="type">Resolution</span>&lt;<span class="type">T</span>&gt;) -&gt; <span class="type">Void</span>)!) &#123;</span><br><span class="line">        seal = .pending(<span class="type">Handlers</span>&lt;<span class="type">T</span>&gt;())</span><br><span class="line">        <span class="keyword">super</span>.<span class="keyword">init</span>()</span><br><span class="line">        resolver = &#123; resolution <span class="keyword">in</span></span><br><span class="line">            <span class="keyword">var</span> handlers: <span class="type">Handlers</span>&lt;<span class="type">T</span>&gt;?</span><br><span class="line">            <span class="keyword">self</span>.barrier.sync(flags: .barrier) &#123;</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">case</span> .pending(<span class="keyword">let</span> hh) = <span class="keyword">self</span>.seal &#123;</span><br><span class="line">                    <span class="keyword">self</span>.seal = .resolved(resolution)</span><br><span class="line">                    handlers = hh</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">let</span> handlers = handlers &#123;</span><br><span class="line">                <span class="keyword">for</span> handler <span class="keyword">in</span> handlers &#123;</span><br><span class="line">                    handler(resolution)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个类就是 <em>代码－3</em> 中那个关键的一步 <code>UnsealedState(resolver:)</code> 参数是一个 inout 类型。该类的成员变量 seal 和 barrier，分别是表示 Promise 未处理的状态和表示一个 GCD 调度队列。此时这里的 resolution 变量也就是 <em>代码－3</em> 中的 <code>.fulfilled($0)</code> ，handlers 保存着还未处理的任务，再以同步的方式处理状态的变化，在 seal 中获取 <code>.pending</code> 状态的任务。然后将结果 resolution 传递给 handler。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码-5</span></span><br><span class="line"> <span class="keyword">open</span> <span class="function"><span class="keyword">func</span> <span class="title">then</span>&lt;U&gt;<span class="params">(on q: DispatchQueue = .<span class="keyword">default</span>, execute body: @escaping <span class="params">(T)</span></span></span> <span class="keyword">throws</span> -&gt; <span class="type">U</span>) -&gt; <span class="type">Promise</span>&lt;<span class="type">U</span>&gt; &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="type">Promise</span>&lt;<span class="type">U</span>&gt; &#123; resolve <span class="keyword">in</span></span><br><span class="line">            state.then(on: q, <span class="keyword">else</span>: resolve) &#123; value <span class="keyword">in</span></span><br><span class="line">                resolve(.fulfilled(<span class="keyword">try</span> body(value)))</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>这个 <code>then</code> 方法是 <em>代码-1</em> 中的 then，同样的该方法也是返回一个 Promise 对象，来处理已解决的任务。  </p>
+<blockquote>
+<p>Parameter body:  The closure that is executed when this Promise is fulfilled</p>
+</blockquote>
+<p>更加具体一些是处理成功回调，通过 state 对象的 <code>then</code> 方法，来进一步处理任务。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码-6</span></span><br><span class="line"><span class="keyword">init</span>(sealant: (@escaping (<span class="type">Resolution</span>&lt;<span class="type">T</span>&gt;) -&gt; <span class="type">Void</span>) -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> resolve: ((<span class="type">Resolution</span>&lt;<span class="type">T</span>&gt;) -&gt; <span class="type">Void</span>)!</span><br><span class="line">        state = <span class="type">UnsealedState</span>(resolver: &amp;resolve)</span><br><span class="line">        sealant(resolve)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>类似的初始化一个 Promise 对象，类似 <em>代码-3</em> 这里就是不做详细的介绍了，</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码-7</span></span><br><span class="line">	<span class="comment">// State&lt;T&gt; 中的方法</span></span><br><span class="line">	<span class="keyword">final</span> <span class="function"><span class="keyword">func</span> <span class="title">then</span>&lt;U&gt;<span class="params">(on q: DispatchQueue, <span class="keyword">else</span> rejecter: @escaping <span class="params">(Resolution&lt;U&gt;)</span></span></span> -&gt; <span class="type">Void</span>, execute body: @escaping (<span class="type">T</span>) <span class="keyword">throws</span> -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">        pipe &#123; resolution <span class="keyword">in</span></span><br><span class="line">            <span class="keyword">switch</span> resolution &#123;</span><br><span class="line">            <span class="keyword">case</span> .fulfilled(<span class="keyword">let</span> value):</span><br><span class="line">                contain_zalgo(q, rejecter: rejecter) &#123;</span><br><span class="line">                    <span class="keyword">try</span> body(value)</span><br><span class="line">                &#125;</span><br><span class="line">            <span class="keyword">case</span> .rejected(<span class="keyword">let</span> error, <span class="keyword">let</span> token):</span><br><span class="line">                rejecter(.rejected(error, token))</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">get</span><span class="params">(<span class="number">_</span> body: @escaping <span class="params">(Seal&lt;T&gt;)</span></span></span> -&gt; <span class="type">Void</span>) &#123; <span class="built_in">fatalError</span>(<span class="string">"Abstract Base Class"</span>) &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">final</span> <span class="function"><span class="keyword">func</span> <span class="title">pipe</span><span class="params">(<span class="number">_</span> body: @escaping <span class="params">(Resolution&lt;T&gt;)</span></span></span> -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123; seal <span class="keyword">in</span></span><br><span class="line">            <span class="keyword">switch</span> seal &#123;</span><br><span class="line">            <span class="keyword">case</span> .pending(<span class="keyword">let</span> handlers):</span><br><span class="line">                handlers.append(body)</span><br><span class="line">            <span class="keyword">case</span> .resolved(<span class="keyword">let</span> resolution):</span><br><span class="line">                body(resolution)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// UnsealedState&lt;T&gt; 中的方法</span></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">get</span><span class="params">(<span class="number">_</span> body: @escaping <span class="params">(Seal&lt;T&gt;)</span></span></span> -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> sealed = <span class="literal">false</span></span><br><span class="line">        barrier.sync &#123;</span><br><span class="line">            <span class="keyword">switch</span> <span class="keyword">self</span>.seal &#123;</span><br><span class="line">            <span class="keyword">case</span> .resolved:</span><br><span class="line">                sealed = <span class="literal">true</span></span><br><span class="line">            <span class="keyword">case</span> .pending:</span><br><span class="line">                sealed = <span class="literal">false</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> !sealed &#123;</span><br><span class="line">            barrier.sync(flags: .barrier) &#123;</span><br><span class="line">                <span class="keyword">switch</span> (<span class="keyword">self</span>.seal) &#123;</span><br><span class="line">                <span class="keyword">case</span> .pending:</span><br><span class="line">                    body(<span class="keyword">self</span>.seal)</span><br><span class="line">                <span class="keyword">case</span> .resolved:</span><br><span class="line">                    sealed = <span class="literal">true</span>  <span class="comment">// welcome to race conditions</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> sealed &#123;</span><br><span class="line">            body(seal)  <span class="comment">// as much as possible we do things OUTSIDE the barrier_sync</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><em>代码-5</em> 中 state 调用的 then 方法，pipe 方法参数闭包中的 <code>contain_zalgo</code> 方法是 PromiseKit 中的最深层的方法。pipe 方法中又调用子类 <code>UnsealedState&lt;T&gt;</code> 的 get 方法，同时它将闭包传递出去，再在 get 方法中判断任务是否解决，已经解决，则闭包回调 seal 至 pipe 方法，此时 seal 处于 pending 状态，则加入到 handlers 中。如果以已经解决，将 pipe 方法参数中的 body 回调至 then 方法，判断任务解决的结果成功还是失败，再做相应的处理。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码－8</span></span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">Seal</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">case</span> pending(<span class="type">Handlers</span>&lt;<span class="type">T</span>&gt;)</span><br><span class="line">    <span class="keyword">case</span> resolved(<span class="type">Resolution</span>&lt;<span class="type">T</span>&gt;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">Resolution</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">case</span> fulfilled(<span class="type">T</span>)</span><br><span class="line">    <span class="keyword">case</span> rejected(<span class="type">Error</span>, <span class="type">ErrorConsumptionToken</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">init</span>(<span class="number">_</span> error: <span class="type">Error</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span> = .rejected(error, <span class="type">ErrorConsumptionToken</span>(error))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面两个 enum 是对每个异步操作一层包装，说明每个操作当前所处的状态，也就是我们上面所提到的三种状态。通过对任务或者任务结果的包装，再通过类似 <code>case .fulfilled(let value)</code> 匹配来获取的正处于某种状态的数据。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码－9</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Handlers</span>&lt;<span class="title">T</span>&gt;: <span class="title">Sequence</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> bodies: [(<span class="type">Resolution</span>&lt;<span class="type">T</span>&gt;) -&gt; <span class="type">Void</span>] = []</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Handlers 来保存还未解决的任务。并且该任务是 <code>(Resolution&lt;T&gt;) -&gt; Void</code> 这样的闭包。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p><code>Alamofire.request(url).responseJSON()</code> 这个部分通过封装网络库 Alamofire 的响应方法 responseJSON()，回调到 UnsealedState 类中，像 <code>Alamofire.request(url).responseJSON().then</code>，在后面链式调用一个 then 方法，则会在 handers 中增加一个未处理的任务闭包，等网络请求返回时。通过 <code>case .pending(let hh) = self.seal</code> 筛选出未处理的闭包，然后处理，这部分处理其实就是将结果分发到各自的闭包。这样一个 Promise 就结束了。<br>我们发现 PromiseKit 的 swift 实现使用了大量的闭包，导致源码阅读起来比较绕。所以定期的多读几遍收获还是很多的。但是对于闭包来讲，如果语义上合适，尾随闭包会增加代码的可读性；反之，反而让代码晦涩难懂。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>对于 PromiseKit 我们会发现这个库和 RxSwift 很类似。他们都是基于函数式编程思想。它们同样是对异步操作的管理。对于语义来说，也许 PromiseKit 更好理解一些。 比如 </p>
+<ul>
+<li>then 方法处理接下里做什么</li>
+<li>always 方法来处理一个总是要操作的步骤，比如：网络请求的 loading 动画</li>
+<li>when 当几个 promise 都获取到结果时，做什么？</li>
+<li>catch 方法处理 error</li>
+</ul>
+<p>对于 RxSwift 而言 <code>map</code>、<code>flatMap</code> 等等，概念和理解都要比 PromiseKit 要辛苦一点。但是 PromiseKit 的缺点也很明显，需要自己去实现相应的 category，比如上面 Alamfire 的网络请求，就需要我们再封装一层才能使用。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p><a href="https://github.com/mxcl/PromiseKit" target="_blank" rel="noopener">github-PromiseKit</a><br><a href="http://www.jianshu.com/p/f060cfd52f17" target="_blank" rel="noopener">iOS如何优雅的处理“回调地狱Callback hell”</a><br><a href="https://onevcat.com/2016/12/concurrency/" target="_blank" rel="noopener">Swift 并行编程现状和展望</a>  </p>
+</blockquote>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>希望对你有帮助，写的不正确的地方，欢迎拍砖～</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/异步编程/">异步编程</a>
+		  
+			<a href="/tags/Promise/">Promise</a>
+		  
+			<a href="/tags/PromiseKit/">PromiseKit</a>
+		  
+			<a href="/tags/源码分析/">源码分析</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/11/21/2017-11-21-adout-uitextview/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">iOS11 之后 UITextView 更加难点了？</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/02/06/2017-02-06-seamless-linking-to-your-app/">
+        <span class="next-text nav-default">无缝链接 Universal Links</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <div style="text-align:center;">
+        <button class="btn" id="load-disqus" onclick="disqus.load();">加载 Disqus 评论</button>
+    </div>
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2016 -
+    
+     
+    2019
+    <span class="footer-author">acumen1005.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+<script type="text/javascript">
+  var disqus_shortname = 'acumen1005';
+  var disqus_identifier = '2017/02/15/2017-02-15-async/';
+
+  var disqus_title = "由一个问题引发的思考－异步编程";
+
+
+  var disqus = {
+    load : function disqus(){
+        if(typeof DISQUS !== 'object') {
+          (function () {
+          var s = document.createElement('script'); s.async = true;
+          s.type = 'text/javascript';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+          }());
+          $('#load-disqus').remove(); ///加载后移除按钮
+        }
+    }
+  }
+
+  
+    var disqus_config = function () {
+        this.page.url = disqus_url;
+        this.page.identifier = disqus_identifier;
+        this.page.title = disqus_title;
+    };
+  
+
+</script>
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

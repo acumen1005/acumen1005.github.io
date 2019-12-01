@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="iOS10.0 UserNotification 介绍"/>
+
+
+
+
+  <meta name="keywords" content="iOS 开发笔记,iOS10,应用扩展,推送," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="acumen1005">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2016/12/16/2016-12-16-iOS10-UserNotification/"/>
+
+
+<meta name="description" content="iOS10 中统一了本地推送和远程推送的 API，在 UserNotifications.framework 来统一处理与推送相关任务，并增加了图片、音频、视频，自定义通知 UI 等新特性。 回顾推送的过程：app 向 apple 服务器申请注册通知，apple 服务器再向 APNs 服务器申请 token，APNs 将 token 发送给 app。app 保存这个 token 到个人服务器。在个">
+<meta name="keywords" content="iOS 开发笔记,iOS10,应用扩展,推送">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS10.0 UserNotification 介绍">
+<meta property="og:url" content="http://yoursite.com/2016/12/16/2016-12-16-iOS10-UserNotification/index.html">
+<meta property="og:site_name" content="acumen1005">
+<meta property="og:description" content="iOS10 中统一了本地推送和远程推送的 API，在 UserNotifications.framework 来统一处理与推送相关任务，并增加了图片、音频、视频，自定义通知 UI 等新特性。 回顾推送的过程：app 向 apple 服务器申请注册通知，apple 服务器再向 APNs 服务器申请 token，APNs 将 token 发送给 app。app 保存这个 token 到个人服务器。在个">
+<meta property="og:image" content="http://ww4.sinaimg.cn/mw690/934b5ef8gw1farqjkb3noj20cz0dwjrr.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/mw690/934b5ef8gw1farr4s1ak7j20xm0mejvo.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/mw690/934b5ef8gw1fasdzfyjxvj20du06st98.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/mw690/934b5ef8gw1fasect9j2oj20pq0qyq57.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/mw690/934b5ef8gw1fasejq1g84j20x807iwgp.jpg">
+<meta property="og:updated_time" content="2018-04-20T05:21:55.620Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS10.0 UserNotification 介绍">
+<meta name="twitter:description" content="iOS10 中统一了本地推送和远程推送的 API，在 UserNotifications.framework 来统一处理与推送相关任务，并增加了图片、音频、视频，自定义通知 UI 等新特性。 回顾推送的过程：app 向 apple 服务器申请注册通知，apple 服务器再向 APNs 服务器申请 token，APNs 将 token 发送给 app。app 保存这个 token 到个人服务器。在个">
+<meta name="twitter:image" content="http://ww4.sinaimg.cn/mw690/934b5ef8gw1farqjkb3noj20cz0dwjrr.jpg">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> iOS10.0 UserNotification 介绍 - acumen1005 </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">acumen1005</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          iOS10.0 UserNotification 介绍
+        
+      </h1>
+      <h1 class="post-preview">
+      </h1>
+      <time class="post-time">
+          Dec 16 2016
+      </time>
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>iOS10 中统一了本地推送和远程推送的 API，在 UserNotifications.framework 来统一处理与推送相关任务，并增加了图片、音频、视频，自定义通知 UI 等新特性。</p>
+<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>推送的过程：app 向 apple 服务器申请注册通知，apple 服务器再向 APNs 服务器申请 token，APNs 将 token 发送给 app。app 保存这个 token 到个人服务器。在个人服务器根据 token 发送推送时，先将 payload 发送到 APNs，① 然后 APNs 根据 token 下发到对应的 app</p>
+<p><img src="http://ww4.sinaimg.cn/mw690/934b5ef8gw1farqjkb3noj20cz0dwjrr.jpg" alt=""></p>
+<p>我的理解：① iOS10 中 Service Extension &amp; Content Extension 是在这里处理完之后再转发出去。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"aps"</span> : &#123;</span><br><span class="line">    <span class="attr">"alert"</span> : &#123;</span><br><span class="line">      <span class="attr">"title"</span> : <span class="string">"message"</span>,</span><br><span class="line">      <span class="attr">"subtitle"</span> : <span class="string">"brief message"</span>  # new</span><br><span class="line">      <span class="string">"body"</span> : <span class="string">"Your message Here"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"sound"</span> : <span class="string">"default"</span>,</span><br><span class="line">    <span class="attr">"badge"</span> : <span class="number">1</span></span><br><span class="line">    <span class="string">"mutable-content"</span>:<span class="number">1</span>		# new</span><br><span class="line">  &#125;	</span><br><span class="line">  <span class="string">"image"</span>: <span class="string">"https://onevcat.com/assets/images/background-cover.jpg"</span>	# new</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="通知界面"><a href="#通知界面" class="headerlink" title="通知界面"></a>通知界面</h2><p>页面变成如下图所示远角矩形，界面的元素有 Title、subTitle、body等，对于用户操作加了 3D Touch、Action。<br><img src="http://ww4.sinaimg.cn/mw690/934b5ef8gw1farr4s1ak7j20xm0mejvo.jpg" alt=""></p>
+<h2 id="多媒体"><a href="#多媒体" class="headerlink" title="多媒体"></a>多媒体</h2><p>iOS10 中通知不再仅仅是一行文字这么简单，在此版本加入了图片、音频、视频这样的多媒体。对于手机碎片化时间有了更好的诠释。当然对于多媒体的大小是有限制的，对于这些多媒体的加载时间大概在 30s 左右，远程下载的多媒体下载结束之后由系统来管理，当然也可以通过 UserNotificationCenter 来管理。</p>
+<table>
+<thead>
+<tr>
+<th>多媒体类型</th>
+<th>限制大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>图片</td>
+<td>10M</td>
+</tr>
+<tr>
+<td>音频</td>
+<td>5M</td>
+</tr>
+<tr>
+<td>视频</td>
+<td>50M</td>
+</tr>
+</tbody>
+</table>
+<p>1.创建 UNNotificationCategory 对象</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> myCatrgory: <span class="type">UNNotificationCategory</span> = &#123;</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">let</span> commentAction = <span class="type">UNTextInputNotificationAction</span>(</span><br><span class="line">        identifier: myNotificationAction.comment.rawValue,</span><br><span class="line">        title: <span class="string">"写评论"</span>,</span><br><span class="line">        options: [.foreground],</span><br><span class="line">        textInputButtonTitle: <span class="string">"发送"</span>,</span><br><span class="line">        textInputPlaceholder: <span class="string">"写点什么吧"</span>)</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">let</span> zanAction = <span class="type">UNNotificationAction</span>(</span><br><span class="line">        identifier: myNotificationAction.zan.rawValue,</span><br><span class="line">        title: <span class="string">"点赞"</span>,</span><br><span class="line">        options: [.foreground])</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">let</span> cancelAction = <span class="type">UNNotificationAction</span>(</span><br><span class="line">        identifier: myNotificationAction.cancel.rawValue,</span><br><span class="line">        title: <span class="string">"取消"</span>,</span><br><span class="line">        options: [.destructive])</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">return</span> <span class="type">UNNotificationCategory</span>(identifier: <span class="type">UserNotificationCategoryType</span>.myNotificationCategory.rawValue, actions: [commentAction, zanAction, cancelAction], intentIdentifiers: [], options: [])</span><br><span class="line">    &#125;()</span><br><span class="line">    </span><br><span class="line"><span class="type">UNUserNotificationCenter</span>.current().setNotificationCategories([inputCatrgory, myCatrgory])</span><br></pre></td></tr></table></figure>
+<p>以上代码也就是定义了一种 category 的 Action 的特征，定义的 Action 在 Appdelegate 中可以做出相应的处理。并注册到 UNUserNotificationCenter 中。此时可以通过通知发送的 payload 中的字段来控制显示哪个 category。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"aps"</span> : &#123;</span><br><span class="line">    <span class="attr">"alert"</span> : <span class="string">"Test message！"</span>,</span><br><span class="line">    <span class="attr">"sound"</span> : <span class="string">"default"</span>,</span><br><span class="line">    <span class="attr">"category"</span>: <span class="string">"myCatrgory"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上的 payload 就是指定 myCatrgory 这个类型。到此一个简单的推送就完成了。</p>
+<p>2.初始化 UNNotificationAttachment 对象   </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> attachment = <span class="type">UNNotificationAttachment</span>(identifier: <span class="string">"identifier"</span>, url: url, options: <span class="literal">nil</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>identifier：是对 attachment 的唯一标示</li>
+<li>url：attachment 资源的链接</li>
+<li>options：attachment 一些可选项  </li>
+</ul>
+<p>比如 <code>.ThumbnailClippingRectKey</code> 表示获取一个缩略图。</p>
+<p>3.带多媒体的推送  </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> #available(iOS <span class="number">10.0</span>, *) &#123;</span><br><span class="line">      <span class="keyword">let</span> content = <span class="type">UNMutableNotificationContent</span>()</span><br><span class="line">      content.title = <span class="string">"iOS10 推送测试"</span></span><br><span class="line">      content.body = <span class="string">"附件"</span></span><br><span class="line">      content.userInfo = [<span class="string">"icon"</span>:<span class="string">"1"</span>,<span class="string">"mutable-content"</span>:<span class="number">1</span>]</span><br><span class="line">      content.categoryIdentifier = <span class="string">"InputSomething"</span></span><br><span class="line">      </span><br><span class="line">      <span class="keyword">let</span> trigger = <span class="type">UNTimeIntervalNotificationTrigger</span>(timeInterval: <span class="number">3</span>, repeats: <span class="literal">false</span>)</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">let</span> requestIdentifier = <span class="string">"imageLocal"</span></span><br><span class="line">      <span class="keyword">if</span> <span class="keyword">let</span> imageURL = <span class="type">Bundle</span>.main.url(forResource: <span class="string">"avatar@2x"</span>, withExtension: <span class="string">"png"</span>), <span class="keyword">let</span> attachment = <span class="keyword">try</span>? <span class="type">UNNotificationAttachment</span>(identifier: <span class="string">"imageAttachment"</span>, url: imageURL, options: <span class="literal">nil</span>) &#123;</span><br><span class="line">        </span><br><span class="line">        content.attachments = [attachment]</span><br><span class="line">      &#125;</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">let</span> request = <span class="type">UNNotificationRequest</span>(identifier: requestIdentifier, content: content, trigger: trigger)</span><br><span class="line">      </span><br><span class="line">      <span class="type">UNUserNotificationCenter</span>.current().add(request, withCompletionHandler: &#123; (error) <span class="keyword">in</span></span><br><span class="line">        <span class="keyword">if</span> (error != <span class="literal">nil</span>) &#123;</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">"error: \(error.debugDescription)"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>以上代码涉及到 UNTimeIntervalNotificationTrigger 触发器，UNNotificationRequest 通知请求，UNMutableNotificationContent 通知内容。<br>其中 UNTimeIntervalNotificationTrigger 是 UNNotificationTrigger 抽象类的一个子类，UNNotificationTrigger 一共有3个子类：</p>
+<ul>
+<li>UNCalendarNotificationTrigger 按日期推送</li>
+<li>UNLocationNotificationTrigger 按地点推送</li>
+<li>UNTimeIntervalNotificationTrigger 按时间推送  </li>
+</ul>
+<p>UNMutableNotificationContent 它相当于payload 的一个对象但是比 payload 内容要丰富。值得注意的是 userInfo 属性，一个类似字典并且其中的内容完全是由开发者来自定义的，大大提高了使用的空间，此时推送可以做更多的事情。</p>
+<p>UNNotificationRequest 将 trigger、content 包装一层发送给 UNUserNotificationCenter 来完成本地推送。</p>
+<p>3.带多媒体的远程推送<br>此时就需要用到 UNNotificationServiceExtension 应用扩展，通过在 payload 中增加 <code>mutable-content</code> 字段来触发改扩展。  </p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">"aps"</span>:&#123;</span><br><span class="line">		<span class="attr">"alert"</span>:<span class="string">"IOS10 推送测试"</span>,</span><br><span class="line">		<span class="attr">"sound"</span>:<span class="string">"default"</span>,</span><br><span class="line">		<span class="attr">"badge"</span>:<span class="number">1</span>,</span><br><span class="line">		<span class="attr">"mutable-content"</span>:<span class="number">1</span>,</span><br><span class="line">		<span class="attr">"category"</span>:<span class="string">"InputSomething"</span></span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="attr">"image"</span>:<span class="string">"https://ws1.sinaimg.cn/mw690/934b5ef8gw1fapg2ssteej20oz0oz420.jpg"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当推送达到 app 时，会启动扩展并回调 didReceive 方法。在该方法里面可以对推送的 UNMutableNotificationContent 做出相应的修改。在 didReceive 回调方法中的 request 包含了推送的具体信息，可以通过其 userInfo 属性来解析出多媒体的 url，当然也可以去读取本地资源来显示。<br>从本地读取资源：  </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> imageURL = <span class="type">Bundle</span>.main.url(forResource: <span class="string">"lufei"</span>, withExtension: <span class="string">"jpg"</span>)</span><br></pre></td></tr></table></figure>
+<p>值得注意的是这里 Bundle 指的是扩展的沙盒，不是 app 的沙盒，所以资源的路径要正确。<br><img src="http://ww4.sinaimg.cn/mw690/934b5ef8gw1fasdzfyjxvj20du06st98.jpg" alt=""></p>
+<p>读取远程的资源和本地资源相比多一步下载保存的操作：  </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">downloadAndSave</span><span class="params">(url: URL, handler: @escaping <span class="params">(<span class="number">_</span> localURL: URL?)</span></span></span> -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> task = <span class="type">URLSession</span>.shared.dataTask(with: url, completionHandler: &#123;</span><br><span class="line">      data, res, error <span class="keyword">in</span></span><br><span class="line">      </span><br><span class="line">      <span class="keyword">var</span> localURL: <span class="type">URL</span>? = 下载完之后保存到本地并返回本地的 url</span><br><span class="line">      </span><br><span class="line">      handler(localURL)</span><br><span class="line">    &#125;)</span><br><span class="line">    </span><br><span class="line">    task.resume()</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>得到本地的 url 之后操作其实就一样了，都是通过 url 来生成一个 UNNotificationAttachment 对象。一切都操作完之后将这个 UNMutableNotificationContent 对象返还 <code>contentHandler(bestAttemptContent)</code>  </p>
+<h2 id="自定义界面"><a href="#自定义界面" class="headerlink" title="自定义界面"></a>自定义界面</h2><p>iOS10 除了显示 Title、subTitle、body 之外，通过 3D Touch 来显示界面<br><img src="http://ww4.sinaimg.cn/mw690/934b5ef8gw1fasect9j2oj20pq0qyq57.jpg" alt=""></p>
+<p>其中上面的黄色区域可以理解成一个 ViewController 操作，下面绿色部分就是 Title 之类的显示内容。这部分是可以隐藏的。在扩展的目录下的 info.plist 编辑一些界面相关的东西。<br><img src="http://ww2.sinaimg.cn/mw690/934b5ef8gw1fasejq1g84j20x807iwgp.jpg" alt=""></p>
+<ul>
+<li>UNNotificationExtensionCategory 触发 Extension 的 category 这里需要在注册才能有效的触发 字符串类型</li>
+<li>UNNotificationExtensionInitialContentSizeRatio 上图黄色区域的长宽比，float 类型</li>
+<li>UNNotificationExtensionDefaultContentHidden 默认内容是否隐藏，Bool 类型</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在 iOS10 中的这次推送的重构，方便了开发者对推送的集成。较高程度的自定义 UI 和多媒体增加了推送的趣味性。接下来赶快去集成吧～</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p><a href="https://onevcat.com/2016/08/notification/" target="_blank" rel="noopener">喵神的 blog</a><br><a href="https://developer.apple.com/reference/usernotifications" target="_blank" rel="noopener">Apple 自家的文档 UserNotification</a></p>
+</blockquote>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>写的不准确的地方，欢迎拍砖～<br><a href="https://github.com/acumen1005/iSwfit" target="_blank" rel="noopener">demo 地址</a></p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/iOS-开发笔记/">iOS 开发笔记</a>
+		  
+			<a href="/tags/iOS10/">iOS10</a>
+		  
+			<a href="/tags/应用扩展/">应用扩展</a>
+		  
+			<a href="/tags/推送/">推送</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2016/12/26/2016-12-26-iOS8-App-Extension/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">iOS8.0 特性应用扩展（App Extension）介绍</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2016/10/27/2016-10-27-Multithread/">
+        <span class="next-text nav-default">多线程简介 － GCD</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <div style="text-align:center;">
+        <button class="btn" id="load-disqus" onclick="disqus.load();">加载 Disqus 评论</button>
+    </div>
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2016 -
+    
+     
+    2019
+    <span class="footer-author">acumen1005.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+<script type="text/javascript">
+  var disqus_shortname = 'acumen1005';
+  var disqus_identifier = '2016/12/16/2016-12-16-iOS10-UserNotification/';
+
+  var disqus_title = "iOS10.0 UserNotification 介绍";
+
+
+  var disqus = {
+    load : function disqus(){
+        if(typeof DISQUS !== 'object') {
+          (function () {
+          var s = document.createElement('script'); s.async = true;
+          s.type = 'text/javascript';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+          }());
+          $('#load-disqus').remove(); ///加载后移除按钮
+        }
+    }
+  }
+
+  
+    var disqus_config = function () {
+        this.page.url = disqus_url;
+        this.page.identifier = disqus_identifier;
+        this.page.title = disqus_title;
+    };
+  
+
+</script>
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

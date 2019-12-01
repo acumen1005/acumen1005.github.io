@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="项目总结（一）"/>
+
+
+
+
+  <meta name="keywords" content="iOS,项目总结,网络层," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="acumen1005">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2018/03/12/2017-05-16-project-summary/"/>
+
+
+<meta name="description" content="最近回学校了，终于有些空下来的时间，有机会说说前段时间所做的项目，在项目中遇到的问题和我所能想到的解决方案。最近，我司开了一个新的项目，由于某些原因这个项目前期是我主导的。简单概括一下项目，项目的只用 MVC 模式开发，语言使用 swift3.0，由于项目时间比较赶，框架是延用了我司现有的框架，由于前期的工作主要是做总体框架的搭建，而在这个框架中主要的是网络模块的设计（在之后可能会需要加入持久化方">
+<meta name="keywords" content="iOS,项目总结,网络层">
+<meta property="og:type" content="article">
+<meta property="og:title" content="项目总结（一）">
+<meta property="og:url" content="http://yoursite.com/2018/03/12/2017-05-16-project-summary/index.html">
+<meta property="og:site_name" content="acumen1005">
+<meta property="og:description" content="最近回学校了，终于有些空下来的时间，有机会说说前段时间所做的项目，在项目中遇到的问题和我所能想到的解决方案。最近，我司开了一个新的项目，由于某些原因这个项目前期是我主导的。简单概括一下项目，项目的只用 MVC 模式开发，语言使用 swift3.0，由于项目时间比较赶，框架是延用了我司现有的框架，由于前期的工作主要是做总体框架的搭建，而在这个框架中主要的是网络模块的设计（在之后可能会需要加入持久化方">
+<meta property="og:image" content="http://ww1.sinaimg.cn/mw690/934b5ef8gy1ffn8vyztocj21380diacw.jpg">
+<meta property="og:updated_time" content="2018-03-12T04:35:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="项目总结（一）">
+<meta name="twitter:description" content="最近回学校了，终于有些空下来的时间，有机会说说前段时间所做的项目，在项目中遇到的问题和我所能想到的解决方案。最近，我司开了一个新的项目，由于某些原因这个项目前期是我主导的。简单概括一下项目，项目的只用 MVC 模式开发，语言使用 swift3.0，由于项目时间比较赶，框架是延用了我司现有的框架，由于前期的工作主要是做总体框架的搭建，而在这个框架中主要的是网络模块的设计（在之后可能会需要加入持久化方">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/mw690/934b5ef8gy1ffn8vyztocj21380diacw.jpg">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> 项目总结（一） - acumen1005 </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">acumen1005</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          项目总结（一）
+        
+      </h1>
+      <h1 class="post-preview">
+      </h1>
+      <time class="post-time">
+          Mar 12 2018
+      </time>
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>最近回学校了，终于有些空下来的时间，有机会说说前段时间所做的项目，在项目中遇到的问题和我所能想到的解决方案。<br>最近，我司开了一个新的项目，由于某些原因这个项目前期是我主导的。简单概括一下项目，项目的只用 MVC 模式开发，语言使用 swift3.0，由于项目时间比较赶，框架是延用了我司现有的框架，由于前期的工作主要是做总体框架的搭建，而在这个框架中主要的是网络模块的设计（在之后可能会需要加入持久化方案等等）。<br>接下来讲讲网络模块是如何构建的。该网络层主要封装了 Alamofire 的第三方网络库和 AlamofireObjectMapper 数据解析。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">XXXAPI</span> </span>&#123;</span><br><span class="line">	<span class="keyword">case</span> getUsers</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">func</span> <span class="title">path</span><span class="params">()</span></span> -&gt; <span class="type">String</span> &#123;</span><br><span class="line">		<span class="keyword">switch</span> <span class="keyword">self</span> &#123;</span><br><span class="line">			<span class="keyword">case</span> .getUsers:</span><br><span class="line">				<span class="keyword">return</span> <span class="string">"getUsers"</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过 swift 中 enum 枚举类型来管理网络请求中 endpoint。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">APIClient</span> </span>&#123;</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">let</span> baseUrl = <span class="string">"http://xxx.xxx.xxx/api/"</span></span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">var</span> headers: <span class="type">Dictionary</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; &#123;</span><br><span class="line">		<span class="keyword">return</span> [<span class="string">"Content-Type"</span>:<span class="string">"json/text"</span>]</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该 struct 是封装 Alamofire 的主体，定义了网络请求的 host 和请求头信息。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">request</span>&lt;T: Mappable&gt;<span class="params">(<span class="number">_</span> API: XXXAPI, ...)</span></span> &#123;</span><br><span class="line">	<span class="keyword">let</span> path = <span class="type">API</span>.path()</span><br><span class="line">	<span class="keyword">let</span> url = baseUrl + path</span><br><span class="line">	<span class="keyword">let</span> req = request(...)</span><br><span class="line">	handleResponse(...)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上是一个请求的主体，所有的 <code>get</code>、<code>post</code>、<code>put</code>、<code>delete</code> 都最终需要调用该方法。在这个 struct 的基础上扩展出我们自己封装的相应的 <code>get</code>、<code>put</code> 等方法。<br>这里使用了泛型 <code>&lt;T: Mappable&gt;</code> 并且要求 <code>T</code> 遵循 <code>Mappable</code> 协议，该协议用来数据解析，与 Alamofire 配套的数据解析。<br>在 request 的方法中 handleResponse 来处理请求返回的 json，做出相应的成功和错误的处理。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">handleResponse</span>&lt;T: Mappable&gt;<span class="params">(...</span></span></span><br><span class="line"><span class="function"><span class="params">    completion: @escaping <span class="params">(T?, String?)</span></span></span> -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">    request.responseObject &#123; (response: <span class="type">DataResponse</span>&lt;<span class="type">Result</span>&lt;<span class="type">T</span>&gt;&gt;) <span class="keyword">in</span></span><br><span class="line">      <span class="keyword">guard</span> <span class="keyword">let</span> result = response.result.value <span class="keyword">else</span> &#123;</span><br><span class="line">        completion(<span class="literal">nil</span>, <span class="literal">nil</span>, <span class="string">"网络错误"</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">      &#125;</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">if</span> <span class="keyword">let</span> code = result.code &#123;</span><br><span class="line">        <span class="comment">// TODO</span></span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        completion(<span class="literal">nil</span>, result.msg ?? <span class="string">"服务器错误"</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://ww1.sinaimg.cn/mw690/934b5ef8gy1ffn8vyztocj21380diacw.jpg" alt=""></p>
+<p>以上就是项目中使用的网络请求的思路，他的核心 APIClient，在使用的时候，我们需要提供 XXXAPI、params、encoding、closure 这几个变量，调用相应的方法，值得注意的是，解析的数据模型与网络数据 json 要一致。<br>在使用的过程中有以下的优点：</p>
+<ol>
+<li>enum 统一管理请求的 endpoint 使代码的可维护性增强，阅读和查询起来也比较方便。</li>
+</ol>
+<p>当然在该过程中提出一点建议：</p>
+<ol>
+<li>enum 管理应当扩大，其实 endpoint 所对应的 parameters、请求方法、encoding 都是已经确定的，所以在确定 endpoint 的同时其实我们也已经确定了它的参数、请求方法、编码方式等信息。</li>
+<li>对于在多 host 的请求（也许我们所需要获取的数据在不同服务器上），当前的这个解决方案需要去重新定义一个 APIClient。我认为更好的解决方案是我们定一个这样的协议：</li>
+</ol>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Requestable</span> </span>&#123;</span><br><span class="line">		<span class="keyword">var</span> baseUrl: <span class="type">String</span> &#123; <span class="keyword">get</span> &#125;</span><br><span class="line">		<span class="keyword">var</span> endpoint: <span class="type">String</span> &#123; <span class="keyword">get</span> &#125;</span><br><span class="line">		<span class="keyword">var</span> method: <span class="type">HTTPMethod</span> &#123; <span class="keyword">get</span> &#125;</span><br><span class="line">		<span class="keyword">var</span> parameters: [<span class="type">String</span>: <span class="type">AnyObject</span>]? &#123; <span class="keyword">get</span> &#125;</span><br><span class="line">		<span class="keyword">var</span> headers: [<span class="type">String</span>: <span class="type">String</span>] &#123; <span class="keyword">get</span> &#125;</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">API</span>: <span class="title">Requestable</span> </span>&#123;</span><br><span class="line">			<span class="keyword">var</span> endpoint: <span class="type">String</span> &#123;</span><br><span class="line">				<span class="keyword">switch</span> <span class="keyword">self</span> &#123;</span><br><span class="line">	    			<span class="keyword">case</span> .once(<span class="number">_</span>):</span><br><span class="line">	      			<span class="keyword">return</span> <span class="string">"/"</span></span><br><span class="line">	    		&#125;</span><br><span class="line">	  		&#125;</span><br><span class="line">	  		<span class="keyword">var</span> method: <span class="type">HTTPMethod</span> &#123;</span><br><span class="line">	  			<span class="keyword">switch</span> <span class="keyword">self</span> &#123;</span><br><span class="line">					<span class="keyword">case</span> .once(<span class="number">_</span>):</span><br><span class="line">						<span class="keyword">return</span> .<span class="keyword">get</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">var</span> parameters: [<span class="type">String</span>: <span class="type">AnyObject</span>]? &#123;</span><br><span class="line">				<span class="keyword">switch</span> <span class="keyword">self</span> &#123;</span><br><span class="line">					<span class="keyword">case</span> .once(<span class="keyword">let</span> id):</span><br><span class="line">						<span class="keyword">return</span> [<span class="string">"id"</span> : id <span class="keyword">as</span> <span class="type">AnyObject</span>]</span><br><span class="line">				&#125;</span><br><span class="line">			 &#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>而 enum API 遵循该协议，需要实现其中的 <code>get</code> 方法。这时对外我们只需要一个 API 的 enum 就够了，确定了 enum 的值，相应的 parameters 等等都确定了。</p>
+<p>通过这样处理，我们将网络层的 endpoint、parameters、HTTPMethod 等都统一的管理，而对外调用的时候只需要传递一个 <code>enum API</code> 的值和相应的参数即可。保持了比较好的封装性，固定的 parameters 也减少了在填写时的错误发生。</p>
+<p><em>以上属于个人见解，如有错误，欢迎拍砖</em></p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/iOS/">iOS</a>
+		  
+			<a href="/tags/项目总结/">项目总结</a>
+		  
+			<a href="/tags/网络层/">网络层</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/04/20/2018-04-20-app-launch-optimization/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">App 启动优化</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/01/18/2018-01-18-adaption-ios11/">
+        <span class="next-text nav-default">iOS11 适配问题</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <div style="text-align:center;">
+        <button class="btn" id="load-disqus" onclick="disqus.load();">加载 Disqus 评论</button>
+    </div>
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2016 -
+    
+     
+    2019
+    <span class="footer-author">acumen1005.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+<script type="text/javascript">
+  var disqus_shortname = 'acumen1005';
+  var disqus_identifier = '2018/03/12/2017-05-16-project-summary/';
+
+  var disqus_title = "项目总结（一）";
+
+
+  var disqus = {
+    load : function disqus(){
+        if(typeof DISQUS !== 'object') {
+          (function () {
+          var s = document.createElement('script'); s.async = true;
+          s.type = 'text/javascript';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+          }());
+          $('#load-disqus').remove(); ///加载后移除按钮
+        }
+    }
+  }
+
+  
+    var disqus_config = function () {
+        this.page.url = disqus_url;
+        this.page.identifier = disqus_identifier;
+        this.page.title = disqus_title;
+    };
+  
+
+</script>
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

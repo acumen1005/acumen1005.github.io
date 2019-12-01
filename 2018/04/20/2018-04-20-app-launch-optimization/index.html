@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="App 启动优化"/>
+
+
+
+
+  <meta name="keywords" content="启动优化," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="acumen1005">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2018/04/20/2018-04-20-app-launch-optimization/"/>
+
+
+<meta name="description" content="一个 App 的启动时间对于用户的使用体验有一定影响，如果我们的启动时间超过 20s 那么我们的 App 将会被系统 kill 掉，不是出现什么 bug 的话，一般不会达到这个阈值的。不过我们希望用户在第一时间或者是尽快能看到我们 App 的内容，那么优化启动的时间就很有必要了，App 启动的时间分为两部分：  pre-main 时间  main() 函数之后的时间   一些概念的介绍App 的启">
+<meta name="keywords" content="启动优化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="App 启动优化">
+<meta property="og:url" content="http://yoursite.com/2018/04/20/2018-04-20-app-launch-optimization/index.html">
+<meta property="og:site_name" content="acumen1005">
+<meta property="og:description" content="一个 App 的启动时间对于用户的使用体验有一定影响，如果我们的启动时间超过 20s 那么我们的 App 将会被系统 kill 掉，不是出现什么 bug 的话，一般不会达到这个阈值的。不过我们希望用户在第一时间或者是尽快能看到我们 App 的内容，那么优化启动的时间就很有必要了，App 启动的时间分为两部分：  pre-main 时间  main() 函数之后的时间   一些概念的介绍App 的启">
+<meta property="og:updated_time" content="2018-04-25T07:49:48.103Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="App 启动优化">
+<meta name="twitter:description" content="一个 App 的启动时间对于用户的使用体验有一定影响，如果我们的启动时间超过 20s 那么我们的 App 将会被系统 kill 掉，不是出现什么 bug 的话，一般不会达到这个阈值的。不过我们希望用户在第一时间或者是尽快能看到我们 App 的内容，那么优化启动的时间就很有必要了，App 启动的时间分为两部分：  pre-main 时间  main() 函数之后的时间   一些概念的介绍App 的启">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> App 启动优化 - acumen1005 </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">acumen1005</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          App 启动优化
+        
+      </h1>
+      <h1 class="post-preview">
+      </h1>
+      <time class="post-time">
+          Apr 20 2018
+      </time>
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>一个 App 的启动时间对于用户的使用体验有一定影响，如果我们的启动时间超过 20s 那么我们的 App 将会被系统 kill 掉，不是出现什么 bug 的话，一般不会达到这个阈值的。不过我们希望用户在第一时间或者是尽快能看到我们 App 的内容，那么优化启动的时间就很有必要了，App 启动的时间分为两部分：</p>
+<ul>
+<li><p>pre-main 时间</p>
+</li>
+<li><p>main() 函数之后的时间</p>
+</li>
+</ul>
+<h2 id="一些概念的介绍"><a href="#一些概念的介绍" class="headerlink" title="一些概念的介绍"></a>一些概念的介绍</h2><p>App 的启动过程：解析 Info.plist 文件，Mach-O 加载，调用 main()、UIApplicationMain()、applicationWillFinishLaunching 函数</p>
+<ul>
+<li><p>热启动：在用户按 Home 健，App 切换到后台之后，用户再点击 App 打开。我们认为是一次热启动。对应在 AppDelegate 里的方法是<code>applicationWillEnterForeground</code> </p>
+</li>
+<li><p>冷启动：App 没有在后台运行或者 App 被 kill 掉之后，用户再点击 App 打开，我们认为是一次冷启动，对应在 AppDelegate 里的方法是 <code>application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: \[UIApplicationLaunchOptionsKey: Any\]?) -&gt; Bool</code> </p>
+</li>
+</ul>
+<p>我们主要关注的是 App 的冷启动时间。<br>在项目中我们会引用很多库，库就是已经编译好的二进制代码，加上头文件之后我们就可以使用。从库的链接方式不同可以分为两种库：</p>
+<ul>
+<li><p>动态库：在 Mac 下的 .dylib 文件（现在好像已经改成 .tbd 文件了），动态库在程序编译阶段不会被拷贝到程序中，只会存放指向动态库的引用，等到程序运行时，才会加载进来。</p>
+</li>
+<li><p>静态库：在 Mac 下的 .a 文件，静态库就是在编译阶段直接拷贝一份到目标程序中。</p>
+</li>
+</ul>
+<p>从上面的概念来看，我们可以了解到他们各自一些优缺点。动态库的优势可以共享库减少包的大小。缺点就是在运行时需要额外花费一些时间加载我们所用到的符号文件。静态库的优势在于因为在编译阶段已经将二进制代码拷贝到程序中，在运行时不需要额外的加载时间；缺点就是打出来的包可能会比较大。</p>
+<h2 id="如何检测-main-方法之前的加载时间"><a href="#如何检测-main-方法之前的加载时间" class="headerlink" title="如何检测 main() 方法之前的加载时间"></a>如何检测 main() 方法之前的加载时间</h2><p>官方提供的方法是在 Edit Scheme -&gt; Arguments -&gt; Environment Variables 中添加 DYLD_PRINT_STATISTICS 为 1，在 App 启动的时候在 console 中就会打印以下信息：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Total</span> pre-main time: <span class="number">673.18</span> milliseconds (<span class="number">100.0</span>%)</span><br><span class="line">         dylib loading time: <span class="number">575.76</span> milliseconds (<span class="number">85.5</span>%)</span><br><span class="line">        rebase/binding time:  <span class="number">26.91</span> milliseconds (<span class="number">3.9</span>%)</span><br><span class="line">            <span class="type">ObjC</span> setup time:  <span class="number">31.83</span> milliseconds (<span class="number">4.7</span>%)</span><br><span class="line">           initializer time:  <span class="number">38.57</span> milliseconds (<span class="number">5.7</span>%)</span><br><span class="line">           slowest intializers :</span><br><span class="line">             libSystem.<span class="type">B</span>.dylib :   <span class="number">7.17</span> milliseconds (<span class="number">1.0</span>%)</span><br></pre></td></tr></table></figure>
+<p>其中就包含了动态链接库的流程，从数据来看 <code>dylib loading time</code> 占时间的绝大部分。(这部分是在优化之后的数据)，在一个 App 启动的过程系统需要加载 100 到 400 多个动态库，这部分系统的动态库官方做了大量的优化，所以对于一些系统级别的动态库耗时不多。</p>
+<p>其实还有一种方法来获取 main() 方法之前的加载时间，就是通过 instruments 工具中的 Time Profiler 来检测这个时间。打开 Time Profiler 选择 Narrative 就可以看到以下信息（iphone6s iOS11.3 设备上检测的结果）</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Initializing</span> application's address space and <span class="keyword">dynamic</span> linking <span class="keyword">required</span> frameworks took <span class="number">703.22</span> ms.</span><br><span class="line"><span class="type">Application</span> took <span class="number">95.46</span> ms between when <span class="type">UIApplicationMain</span>() or <span class="type">NSApplicationMain</span>() started and when the did-finish-launching notifications finished.    </span><br><span class="line"><span class="type">Currently</span> running <span class="keyword">in</span> the foreground...</span><br></pre></td></tr></table></figure>
+<p>信息告诉我们初始化 App 地址和动态链接 framework 用了 703.22 ms，App 在 UIApplicationMain() 开始到 <code>did-finish-launching</code> 用了 95.46 ms </p>
+<p>通过这些统计的信息我们需要了解一下在 App 启动的过程中发生了什么？</p>
+<ol>
+<li><p>load dylibs </p>
+</li>
+<li><p>rebase </p>
+</li>
+<li><p>bind</p>
+</li>
+<li><p>objc setup</p>
+</li>
+<li><p>initalizers</p>
+</li>
+</ol>
+<p>大致上在 App 启动解析完 Info.plist 之后做了以上五步，大部分对应上了 console 打印的信息。我们就不多深究内部的机制， 这几步大概的过程是这样的。解析依赖的动态库，找到对应的 mach-o 文件，验证文件并注册签名，调用每个片段的 mmap() 函数，然后递归加载所有的依赖库，将加载进来的 mach-o 文件内部的指针重定位，地址绑定符号。然后注册 Objc 类，将各种 categories 加入各自的 method lists，并完成各种初始化。</p>
+<p>所以我们可以了解到的优化方案：</p>
+<ol>
+<li><p>尽量减少动态库的数量</p>
+</li>
+<li><p>移除多余的 Objc 类</p>
+</li>
+<li><p>在类的 load 方法中尽可能减少耗时操作、延迟这些操作</p>
+</li>
+<li><p>在 swift 项目中尽可能使用 struct （为了减少符号量）</p>
+</li>
+</ol>
+<p>这部分遇到的瓶颈是由于我们项目依赖比较多的第三方 framework（暂时还没有替代方案） 导致我们在链接静态库的耗时比较大，在优化的过程中，删除多余的 framework 和一些系统的 dyld。</p>
+<p><em>ps：由于 swift 目前还不支持静态库，所以我们在使用 cocoapods 的时候往往会添加 <code>use_frameworks!</code> ，之后 cocoapods 的库将被认为是动态库。</em></p>
+<h2 id="main-方法之后加载时间检测"><a href="#main-方法之后加载时间检测" class="headerlink" title="main() 方法之后加载时间检测"></a>main() 方法之后加载时间检测</h2><p>main() 方法之后的加载时间检测主要是关于 <code>application(didFinishLaunchingWithOptions)</code> 这个方法调用结束到 App 首页渲染完毕的时间。所以我们比较容易想到的优化方案：</p>
+<ol>
+<li><p>一些第三方的 SDK 的初始化方法延迟或者异步化</p>
+</li>
+<li><p>首页视图使用纯代码，而不是使用 storyboard 或者是 xib 来实现</p>
+</li>
+</ol>
+<p>该如何检测这部分时间，在 swift 中我们需要做一点额外的工作，因为在 swift 中不像 OC 的项目含有一个 main.m 的文件，取而代之的是 <code>@UIAppliactionMain</code> 这个修饰，在 AppDelegate 之前添加了这个修饰，编译器会自动帮助我们生成好 main.swift 这个文件，这个文件的是如下内容</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="type">LaunchAppDuration</span> = <span class="type">Date</span>().timeIntervalSince1970</span><br><span class="line"></span><br><span class="line"><span class="type">UIApplicationMain</span>(</span><br><span class="line">  <span class="type">CommandLine</span>.argc,</span><br><span class="line">  <span class="type">UnsafeMutableRawPointer</span>(<span class="type">CommandLine</span>.unsafeArgv)</span><br><span class="line">    .bindMemory(</span><br><span class="line">      to: <span class="type">UnsafeMutablePointer</span>&lt;<span class="type">Int8</span>&gt;.<span class="keyword">self</span>,</span><br><span class="line">      capacity: <span class="type">Int</span>(<span class="type">CommandLine</span>.argc)),</span><br><span class="line">  <span class="type">NSStringFromClass</span>(<span class="type">MyApplication</span>.<span class="keyword">self</span>),</span><br><span class="line">  <span class="type">NSStringFromClass</span>(<span class="type">AppDelegate</span>.<span class="keyword">self</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>实例化一个  UIApplicationMain 对象，删掉 <code>@UIApplicationMain</code> 系统自动读取这个文件，并加载我们的 App。</p>
+<p>我们需要在这个文件中加入一个变量 <code>LaunchAppDuration</code> 来记录加载 main.swift 文件的时间戳。然后在首页的 <code>viewDidAppear</code> 方法中再获取一次时间戳计算时间间隔。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">viewDidAppear</span><span class="params">(<span class="number">_</span> animated: Bool)</span></span> &#123;</span><br><span class="line">    <span class="keyword">super</span>.viewDidAppear(animated)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> now = <span class="type">Date</span>().timeIntervalSince1970</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"\(now) - \(LaunchAppDuration) = LaunchAppDuration = \(now - LaunchAppDuration)"</span>)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>分别在 HomeTableViewController 和 HomeViewController 两个视图控制器的 <code>viewDidAppear</code> 中获取时间：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">HomeViewController</span> <span class="type">LaunchAppDuration</span> = <span class="number">1.42967915534973</span></span><br></pre></td></tr></table></figure>
+<p>这里的 1.4s 的意思是启动到用户看见首页流需要 1.4s。这部分主要的耗时我猜测是：</p>
+<ol>
+<li><p>之前将第三方库延迟初始化（延迟到 HomeViewController 的 ViewDidLoad 中）导致（大概有 0.5s 左右）</p>
+</li>
+<li><p>我们目前的 HomeTabViewController 是通过 storyboard 加载的</p>
+</li>
+</ol>
+<p>至于第一点延迟加载确实加快了 App 的启动，但是发现这里需要一秒多乃至两秒，对用户的体验不是很好，所以同时也可以考虑从产品的角度来改善体验，比如：在闪屏之后加入广告图或者其他之类图片，同时进行初始化一部分第三方 SDK，这样不至于让用户等待。更好的是类似 Facebook 等 App 在载入首页的时候增加占位视图。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>App 启动时间 = pre-main 加载的时间 + main() 之后到 did-finish-launch 执行完的时间。从这次优化的过程来看，延迟一些第三方 SDK 初始化的效果比较明显，目前还是比较暴力的将初始化延迟到 HomeViewController 的 viewDidLoad 方法中，更好的方案是某些 SDK 可能实现按需初始化，等到真正要使用之前再初始化，这样比较合理。在 pre-main 的优化由于业务的需求大量的 framework 不能移除，并切暂时没有找到合并的方案。但是在 main() 函数之后还是有些地方可以继续优化的：纯代码编写 HomeTabViewController，懒惰初始化 SDK</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="[https://developer.apple.com/videos/play/wwdc2016/406](https://developer.apple.com/videos/play/wwdc2016/406">Optimizing App Startup Time</a></p>
+<p><a href="https://techblog.toutiao.com/2017/01/17/iosspeed/" target="_blank" rel="noopener">今日头条iOS客户端启动速度优化</a></p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/启动优化/">启动优化</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/06/30/2018-06-30-cocoapods-static-library/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">CocoaPods 打包静态库</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/03/12/2017-05-16-project-summary/">
+        <span class="next-text nav-default">项目总结（一）</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+    <div style="text-align:center;">
+        <button class="btn" id="load-disqus" onclick="disqus.load();">加载 Disqus 评论</button>
+    </div>
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2016 -
+    
+     
+    2019
+    <span class="footer-author">acumen1005.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+<script type="text/javascript">
+  var disqus_shortname = 'acumen1005';
+  var disqus_identifier = '2018/04/20/2018-04-20-app-launch-optimization/';
+
+  var disqus_title = "App 启动优化";
+
+
+  var disqus = {
+    load : function disqus(){
+        if(typeof DISQUS !== 'object') {
+          (function () {
+          var s = document.createElement('script'); s.async = true;
+          s.type = 'text/javascript';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+          }());
+          $('#load-disqus').remove(); ///加载后移除按钮
+        }
+    }
+  }
+
+  
+    var disqus_config = function () {
+        this.page.url = disqus_url;
+        this.page.identifier = disqus_identifier;
+        this.page.title = disqus_title;
+    };
+  
+
+</script>
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>
