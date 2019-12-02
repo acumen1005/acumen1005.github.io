@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+  <head><meta name="generator" content="Hexo 3.9.0">
     
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="description" content="HTTPS 原理简单介绍"/>
+  <meta name="description" content="HTTPS 原理简单介绍">
 
 
 
 
-  <meta name="keywords" content="HTTPS,安全," />
+  <meta name="keywords" content="HTTPS,安全,">
 
 
 
@@ -28,11 +28,11 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
 
 
 
-<link rel="canonical" href="http://yoursite.com/2017/01/02/2017-01-02-HTTPS/"/>
+<link rel="canonical" href="http://yoursite.com/2017/01/02/2017-01-02-HTTPS/">
 
 
 <meta name="description" content="在2017年估计是 HTTPS 的热潮，从 Apple 在 WWDC 宣布 App Store 的中 App 强制打开 ATS （App Transport Security），这也就意味着我们的应用需要支持 HTTPS，至少是对应的网络接口需要支持。关于其他的，比如CDN、外链是否需要支持，Apple 也没有给出明确的要求。这篇文章介绍一下 HTTPS 的原理。 为什么需要 HTTPS我们知道">
@@ -42,6 +42,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/01/02/2017-01-02-HTTPS/index.html">
 <meta property="og:site_name" content="acumen1005">
 <meta property="og:description" content="在2017年估计是 HTTPS 的热潮，从 Apple 在 WWDC 宣布 App Store 的中 App 强制打开 ATS （App Transport Security），这也就意味着我们的应用需要支持 HTTPS，至少是对应的网络接口需要支持。关于其他的，比如CDN、外链是否需要支持，Apple 也没有给出明确的要求。这篇文章介绍一下 HTTPS 的原理。 为什么需要 HTTPS我们知道">
+<meta property="og:locale" content="default">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/934b5ef8gw1fbcb0ajbgej20il09zmzr.jpg">
 <meta property="og:image" content="http://ww4.sinaimg.cn/mw690/934b5ef8gw1fbch2izn6ej21040jijvh.jpg">
 <meta property="og:updated_time" content="2018-04-20T05:22:45.583Z">
@@ -51,8 +52,8 @@
 <meta name="twitter:image" content="http://ww2.sinaimg.cn/large/934b5ef8gw1fbcb0ajbgej20il09zmzr.jpg">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
 
@@ -267,7 +268,31 @@
     
         2016 -
     
-     
+    
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCLSX-Z_14rwcYrgyc7mVXI0lBHnzQjIOo",
+    authDomain: "blog-5bf4e.firebaseapp.com",
+    databaseURL: "https://blog-5bf4e.firebaseio.com",
+    projectId: "blog-5bf4e",
+    storageBucket: "blog-5bf4e.appspot.com",
+    messagingSenderId: "23978860195",
+    appId: "1:23978860195:web:802fdb66f68722c0bda916",
+    measurementId: "G-MZPGKWFTEP"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
     2019
     <span class="footer-author">acumen1005.</span>
     <span class="power-by">
@@ -284,7 +309,7 @@
     
 
 <script type="text/javascript">
-  var disqus_shortname = 'acumen1005';
+  var disqus_shortname = 'https-acumen1005-github-io';
   var disqus_identifier = '2017/01/02/2017-01-02-HTTPS/';
 
   var disqus_title = "HTTPS 原理简单介绍";

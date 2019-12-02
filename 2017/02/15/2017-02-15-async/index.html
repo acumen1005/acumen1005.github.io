@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+  <head><meta name="generator" content="Hexo 3.9.0">
     
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="description" content="由一个问题引发的思考－异步编程"/>
+  <meta name="description" content="由一个问题引发的思考－异步编程">
 
 
 
 
-  <meta name="keywords" content="异步编程,Promise,PromiseKit,源码分析," />
+  <meta name="keywords" content="异步编程,Promise,PromiseKit,源码分析,">
 
 
 
@@ -28,11 +28,11 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
 
 
 
-<link rel="canonical" href="http://yoursite.com/2017/02/15/2017-02-15-async/"/>
+<link rel="canonical" href="http://yoursite.com/2017/02/15/2017-02-15-async/">
 
 
 <meta name="description" content="解释下，题目好像取的有点大了，异步编程… 文章的内容涉及一个问题和 PromiseKit 的源码分析。 由一个问题引发的思考。我们在操作一系列的网络请求并且这些网络请求之前存在依赖关系。比如：    用户登陆完之后服务端返回 token 获取用户的联系人的列表（需要 token 认证）  以上两个网络请求中间就涉及到 token 衔接，我们很容易想到这个问题，通过一次嵌套就能完成。 1234567">
@@ -42,6 +42,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/02/15/2017-02-15-async/index.html">
 <meta property="og:site_name" content="acumen1005">
 <meta property="og:description" content="解释下，题目好像取的有点大了，异步编程… 文章的内容涉及一个问题和 PromiseKit 的源码分析。 由一个问题引发的思考。我们在操作一系列的网络请求并且这些网络请求之前存在依赖关系。比如：    用户登陆完之后服务端返回 token 获取用户的联系人的列表（需要 token 认证）  以上两个网络请求中间就涉及到 token 衔接，我们很容易想到这个问题，通过一次嵌套就能完成。 1234567">
+<meta property="og:locale" content="default">
 <meta property="og:image" content="http://ww2.sinaimg.cn/mw690/934b5ef8jw1fcr0u0gcxwj20ns0f30t6.jpg">
 <meta property="og:updated_time" content="2018-04-20T05:23:13.364Z">
 <meta name="twitter:card" content="summary">
@@ -50,8 +51,8 @@
 <meta name="twitter:image" content="http://ww2.sinaimg.cn/mw690/934b5ef8jw1fcr0u0gcxwj20ns0f30t6.jpg">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
 
@@ -275,7 +276,31 @@
     
         2016 -
     
-     
+    
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCLSX-Z_14rwcYrgyc7mVXI0lBHnzQjIOo",
+    authDomain: "blog-5bf4e.firebaseapp.com",
+    databaseURL: "https://blog-5bf4e.firebaseio.com",
+    projectId: "blog-5bf4e",
+    storageBucket: "blog-5bf4e.appspot.com",
+    messagingSenderId: "23978860195",
+    appId: "1:23978860195:web:802fdb66f68722c0bda916",
+    measurementId: "G-MZPGKWFTEP"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
     2019
     <span class="footer-author">acumen1005.</span>
     <span class="power-by">
@@ -292,7 +317,7 @@
     
 
 <script type="text/javascript">
-  var disqus_shortname = 'acumen1005';
+  var disqus_shortname = 'https-acumen1005-github-io';
   var disqus_identifier = '2017/02/15/2017-02-15-async/';
 
   var disqus_title = "由一个问题引发的思考－异步编程";

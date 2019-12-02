@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+  <head><meta name="generator" content="Hexo 3.9.0">
     
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="description" content="iOS11 之后 UITextView 更加难点了？"/>
+  <meta name="description" content="iOS11 之后 UITextView 更加难点了？">
 
 
 
 
-  <meta name="keywords" content="UIKit,UITextView," />
+  <meta name="keywords" content="UIKit,UITextView,">
 
 
 
@@ -28,11 +28,11 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
 
 
 
-<link rel="canonical" href="http://yoursite.com/2017/11/21/2017-11-21-adout-uitextview/"/>
+<link rel="canonical" href="http://yoursite.com/2017/11/21/2017-11-21-adout-uitextview/">
 
 
 <meta name="description" content="在 iOS11 系统更新的推送之后，有大部分 iOS11 的用户反馈在 iOS11 的系统上 UITextView 的 link 很难点击打开。经过几番的测试和搜索终于几乎能稳定复现这个问题 —— UITextView  中的 link 难以点击。 由于历史原因，在 app 中一些复制、选择等操作的文本都是采用 UITextView 来实现的，然而这些 UITextView 是作为 UITable">
@@ -42,6 +42,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/11/21/2017-11-21-adout-uitextview/index.html">
 <meta property="og:site_name" content="acumen1005">
 <meta property="og:description" content="在 iOS11 系统更新的推送之后，有大部分 iOS11 的用户反馈在 iOS11 的系统上 UITextView 的 link 很难点击打开。经过几番的测试和搜索终于几乎能稳定复现这个问题 —— UITextView  中的 link 难以点击。 由于历史原因，在 app 中一些复制、选择等操作的文本都是采用 UITextView 来实现的，然而这些 UITextView 是作为 UITable">
+<meta property="og:locale" content="default">
 <meta property="og:image" content="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fm4rd9jjvij20of05smyi.jpg">
 <meta property="og:updated_time" content="2018-04-20T05:23:31.022Z">
 <meta name="twitter:card" content="summary">
@@ -50,8 +51,8 @@
 <meta name="twitter:image" content="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fm4rd9jjvij20of05smyi.jpg">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
 
@@ -209,7 +210,31 @@
     
         2016 -
     
-     
+    
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCLSX-Z_14rwcYrgyc7mVXI0lBHnzQjIOo",
+    authDomain: "blog-5bf4e.firebaseapp.com",
+    databaseURL: "https://blog-5bf4e.firebaseio.com",
+    projectId: "blog-5bf4e",
+    storageBucket: "blog-5bf4e.appspot.com",
+    messagingSenderId: "23978860195",
+    appId: "1:23978860195:web:802fdb66f68722c0bda916",
+    measurementId: "G-MZPGKWFTEP"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
     2019
     <span class="footer-author">acumen1005.</span>
     <span class="power-by">
@@ -226,7 +251,7 @@
     
 
 <script type="text/javascript">
-  var disqus_shortname = 'acumen1005';
+  var disqus_shortname = 'https-acumen1005-github-io';
   var disqus_identifier = '2017/11/21/2017-11-21-adout-uitextview/';
 
   var disqus_title = "iOS11 之后 UITextView 更加难点了？";

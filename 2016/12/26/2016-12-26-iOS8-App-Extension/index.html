@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+  <head><meta name="generator" content="Hexo 3.9.0">
     
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="description" content="iOS8.0 特性应用扩展（App Extension）介绍"/>
+  <meta name="description" content="iOS8.0 特性应用扩展（App Extension）介绍">
 
 
 
 
-  <meta name="keywords" content="iOS 开发笔记,iOS10,应用扩展,widget," />
+  <meta name="keywords" content="iOS 开发笔记,iOS10,应用扩展,widget,">
 
 
 
@@ -28,11 +28,11 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
 
 
 
-<link rel="canonical" href="http://yoursite.com/2016/12/26/2016-12-26-iOS8-App-Extension/"/>
+<link rel="canonical" href="http://yoursite.com/2016/12/26/2016-12-26-iOS8-App-Extension/">
 
 
 <meta name="description" content="应用扩展（App Extension）虽然是 iOS8.0 推出的特性，但是在之后的版本中应用的比较广泛，比如：iOS10 中 Notification Service、Notification Content 和 Intents 等等。这里的应用扩展和类扩展可以类比两个概念，所以应用扩展其实是系统提供了一些扩展接入点来给开发者一定的自定义空间来为系统添加附加的功能。Apple 特别指出，扩展应该">
@@ -42,6 +42,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/12/26/2016-12-26-iOS8-App-Extension/index.html">
 <meta property="og:site_name" content="acumen1005">
 <meta property="og:description" content="应用扩展（App Extension）虽然是 iOS8.0 推出的特性，但是在之后的版本中应用的比较广泛，比如：iOS10 中 Notification Service、Notification Content 和 Intents 等等。这里的应用扩展和类扩展可以类比两个概念，所以应用扩展其实是系统提供了一些扩展接入点来给开发者一定的自定义空间来为系统添加附加的功能。Apple 特别指出，扩展应该">
+<meta property="og:locale" content="default">
 <meta property="og:image" content="http://ww4.sinaimg.cn/mw690/934b5ef8gw1fb35ae80q5j214k0ssgr5.jpg">
 <meta property="og:image" content="http://ww4.sinaimg.cn/mw690/934b5ef8gw1fb45q3j6iyj20f807yab3.jpg">
 <meta property="og:image" content="http://ww3.sinaimg.cn/mw690/934b5ef8gw1fb30g6mpx5j20lo09ijst.jpg">
@@ -57,8 +58,8 @@
 <meta name="twitter:image" content="http://ww4.sinaimg.cn/mw690/934b5ef8gw1fb35ae80q5j214k0ssgr5.jpg">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
 
@@ -274,7 +275,31 @@
     
         2016 -
     
-     
+    
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCLSX-Z_14rwcYrgyc7mVXI0lBHnzQjIOo",
+    authDomain: "blog-5bf4e.firebaseapp.com",
+    databaseURL: "https://blog-5bf4e.firebaseio.com",
+    projectId: "blog-5bf4e",
+    storageBucket: "blog-5bf4e.appspot.com",
+    messagingSenderId: "23978860195",
+    appId: "1:23978860195:web:802fdb66f68722c0bda916",
+    measurementId: "G-MZPGKWFTEP"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
     2019
     <span class="footer-author">acumen1005.</span>
     <span class="power-by">
@@ -291,7 +316,7 @@
     
 
 <script type="text/javascript">
-  var disqus_shortname = 'acumen1005';
+  var disqus_shortname = 'https-acumen1005-github-io';
   var disqus_identifier = '2016/12/26/2016-12-26-iOS8-App-Extension/';
 
   var disqus_title = "iOS8.0 特性应用扩展（App Extension）介绍";

@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+  <head><meta name="generator" content="Hexo 3.9.0">
     
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="description" content="［翻译］应用程序的执行状态"/>
+  <meta name="description" content="［翻译］应用程序的执行状态">
 
 
 
 
-  <meta name="keywords" content="翻译,app 生命周期," />
+  <meta name="keywords" content="翻译,app 生命周期,">
 
 
 
@@ -28,11 +28,11 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
 
 
 
-<link rel="canonical" href="http://yoursite.com/2016/10/17/2016-10-17-Translate-Execution-States-for-Apps/"/>
+<link rel="canonical" href="http://yoursite.com/2016/10/17/2016-10-17-Translate-Execution-States-for-Apps/">
 
 
 <meta name="description" content="在任何时刻，你的应用程序正处于下表的某一个状态。在整个系统中应用状态的改变是对动作发生做出的响应。比如，当用户按下 Home 健，一个来电，或者任何其他中断发生，正在运行的应用程序立刻做出响应。    状态 描述     未运行 应用程序还未启动或者在运行时被系统终止   未激活 应用程序正运行在前台但是没有接收事件（即使它可能在执行其他代码），应用短暂地处于这种状态，作为转变其他状态的过渡。">
@@ -42,14 +42,15 @@
 <meta property="og:url" content="http://yoursite.com/2016/10/17/2016-10-17-Translate-Execution-States-for-Apps/index.html">
 <meta property="og:site_name" content="acumen1005">
 <meta property="og:description" content="在任何时刻，你的应用程序正处于下表的某一个状态。在整个系统中应用状态的改变是对动作发生做出的响应。比如，当用户按下 Home 健，一个来电，或者任何其他中断发生，正在运行的应用程序立刻做出响应。    状态 描述     未运行 应用程序还未启动或者在运行时被系统终止   未激活 应用程序正运行在前台但是没有接收事件（即使它可能在执行其他代码），应用短暂地处于这种状态，作为转变其他状态的过渡。">
+<meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2018-04-20T05:21:16.024Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="［翻译］应用程序的执行状态">
 <meta name="twitter:description" content="在任何时刻，你的应用程序正处于下表的某一个状态。在整个系统中应用状态的改变是对动作发生做出的响应。比如，当用户按下 Home 健，一个来电，或者任何其他中断发生，正在运行的应用程序立刻做出响应。    状态 描述     未运行 应用程序还未启动或者在运行时被系统终止   未激活 应用程序正运行在前台但是没有接收事件（即使它可能在执行其他代码），应用短暂地处于这种状态，作为转变其他状态的过渡。">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
 
@@ -260,7 +261,31 @@
     
         2016 -
     
-     
+    
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCLSX-Z_14rwcYrgyc7mVXI0lBHnzQjIOo",
+    authDomain: "blog-5bf4e.firebaseapp.com",
+    databaseURL: "https://blog-5bf4e.firebaseio.com",
+    projectId: "blog-5bf4e",
+    storageBucket: "blog-5bf4e.appspot.com",
+    messagingSenderId: "23978860195",
+    appId: "1:23978860195:web:802fdb66f68722c0bda916",
+    measurementId: "G-MZPGKWFTEP"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
     2019
     <span class="footer-author">acumen1005.</span>
     <span class="power-by">
@@ -277,7 +302,7 @@
     
 
 <script type="text/javascript">
-  var disqus_shortname = 'acumen1005';
+  var disqus_shortname = 'https-acumen1005-github-io';
   var disqus_identifier = '2016/10/17/2016-10-17-Translate-Execution-States-for-Apps/';
 
   var disqus_title = "［翻译］应用程序的执行状态";

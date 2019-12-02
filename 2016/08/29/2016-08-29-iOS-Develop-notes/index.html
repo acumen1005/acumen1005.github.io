@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+  <head><meta name="generator" content="Hexo 3.9.0">
     
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="description" content="关于 NSArray 遍历 mutated 错误"/>
+  <meta name="description" content="关于 NSArray 遍历 mutated 错误">
 
 
 
 
-  <meta name="keywords" content="iOS 开发笔记,NSArray," />
+  <meta name="keywords" content="iOS 开发笔记,NSArray,">
 
 
 
@@ -28,11 +28,11 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
 
 
 
-<link rel="canonical" href="http://yoursite.com/2016/08/29/2016-08-29-iOS-Develop-notes/"/>
+<link rel="canonical" href="http://yoursite.com/2016/08/29/2016-08-29-iOS-Develop-notes/">
 
 
 <meta name="description" content="问题在开发过程中对于 NSArray 和 NSMutableArray 等的使用不当，出现crash，在最近的开发中对于枚举 sublayers 操作遇到这样的错误。   1Collection &amp;lt;__NSArrayM: 0xxxxxxx&amp;gt; was mutated while being enumerated. 字面意思就是－－集合（数组）在枚举时发生突变。同时对可变数组进行两种操作：">
@@ -42,14 +42,15 @@
 <meta property="og:url" content="http://yoursite.com/2016/08/29/2016-08-29-iOS-Develop-notes/index.html">
 <meta property="og:site_name" content="acumen1005">
 <meta property="og:description" content="问题在开发过程中对于 NSArray 和 NSMutableArray 等的使用不当，出现crash，在最近的开发中对于枚举 sublayers 操作遇到这样的错误。   1Collection &amp;lt;__NSArrayM: 0xxxxxxx&amp;gt; was mutated while being enumerated. 字面意思就是－－集合（数组）在枚举时发生突变。同时对可变数组进行两种操作：">
+<meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2018-04-20T05:16:45.775Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于 NSArray 遍历 mutated 错误">
 <meta name="twitter:description" content="问题在开发过程中对于 NSArray 和 NSMutableArray 等的使用不当，出现crash，在最近的开发中对于枚举 sublayers 操作遇到这样的错误。   1Collection &amp;lt;__NSArrayM: 0xxxxxxx&amp;gt; was mutated while being enumerated. 字面意思就是－－集合（数组）在枚举时发生突变。同时对可变数组进行两种操作：">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
 
@@ -208,7 +209,31 @@
     
         2016 -
     
-     
+    
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCLSX-Z_14rwcYrgyc7mVXI0lBHnzQjIOo",
+    authDomain: "blog-5bf4e.firebaseapp.com",
+    databaseURL: "https://blog-5bf4e.firebaseio.com",
+    projectId: "blog-5bf4e",
+    storageBucket: "blog-5bf4e.appspot.com",
+    messagingSenderId: "23978860195",
+    appId: "1:23978860195:web:802fdb66f68722c0bda916",
+    measurementId: "G-MZPGKWFTEP"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
     2019
     <span class="footer-author">acumen1005.</span>
     <span class="power-by">
@@ -225,7 +250,7 @@
     
 
 <script type="text/javascript">
-  var disqus_shortname = 'acumen1005';
+  var disqus_shortname = 'https-acumen1005-github-io';
   var disqus_identifier = '2016/08/29/2016-08-29-iOS-Develop-notes/';
 
   var disqus_title = "关于 NSArray 遍历 mutated 错误";

@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+  <head><meta name="generator" content="Hexo 3.9.0">
     
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="description" content="iOS11 适配问题"/>
+  <meta name="description" content="iOS11 适配问题">
 
 
 
 
-  <meta name="keywords" content="iOS 11,safe area,适配," />
+  <meta name="keywords" content="iOS 11,safe area,适配,">
 
 
 
@@ -28,11 +28,11 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
 
 
 
-<link rel="canonical" href="http://yoursite.com/2018/01/18/2018-01-18-adaption-ios11/"/>
+<link rel="canonical" href="http://yoursite.com/2018/01/18/2018-01-18-adaption-ios11/">
 
 
 <meta name="description" content="文章介绍在 iOS11 上的一些变化，主要关于 navigation bar、safe area、UIScrollView 的变化和一些适配的方法。 Safe Area主要关心一个 safeArea (安全区域) 的问题。以下是 Apple 给出安全区域的定义：  The safe area of a view reflects the area not covered by navigation">
@@ -42,6 +42,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/01/18/2018-01-18-adaption-ios11/index.html">
 <meta property="og:site_name" content="acumen1005">
 <meta property="og:description" content="文章介绍在 iOS11 上的一些变化，主要关于 navigation bar、safe area、UIScrollView 的变化和一些适配的方法。 Safe Area主要关心一个 safeArea (安全区域) 的问题。以下是 Apple 给出安全区域的定义：  The safe area of a view reflects the area not covered by navigation">
+<meta property="og:locale" content="default">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/934b5ef8gy1fn96scjy8sj20i70bw3zd.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fn97x3iztej20a805rdg8.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/mw690/934b5ef8gy1fnah2sysswj209y06q3yw.jpg">
@@ -56,8 +57,8 @@
 <meta name="twitter:image" content="http://ww1.sinaimg.cn/large/934b5ef8gy1fn96scjy8sj20i70bw3zd.jpg">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
 
@@ -272,7 +273,31 @@
     
         2016 -
     
-     
+    
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCLSX-Z_14rwcYrgyc7mVXI0lBHnzQjIOo",
+    authDomain: "blog-5bf4e.firebaseapp.com",
+    databaseURL: "https://blog-5bf4e.firebaseio.com",
+    projectId: "blog-5bf4e",
+    storageBucket: "blog-5bf4e.appspot.com",
+    messagingSenderId: "23978860195",
+    appId: "1:23978860195:web:802fdb66f68722c0bda916",
+    measurementId: "G-MZPGKWFTEP"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
     2019
     <span class="footer-author">acumen1005.</span>
     <span class="power-by">
@@ -289,7 +314,7 @@
     
 
 <script type="text/javascript">
-  var disqus_shortname = 'acumen1005';
+  var disqus_shortname = 'https-acumen1005-github-io';
   var disqus_identifier = '2018/01/18/2018-01-18-adaption-ios11/';
 
   var disqus_title = "iOS11 适配问题";

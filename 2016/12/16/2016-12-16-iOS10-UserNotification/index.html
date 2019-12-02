@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+  <head><meta name="generator" content="Hexo 3.9.0">
     
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="description" content="iOS10.0 UserNotification 介绍"/>
+  <meta name="description" content="iOS10.0 UserNotification 介绍">
 
 
 
 
-  <meta name="keywords" content="iOS 开发笔记,iOS10,应用扩展,推送," />
+  <meta name="keywords" content="iOS 开发笔记,iOS10,推送,应用扩展,">
 
 
 
@@ -28,20 +28,21 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
 
 
 
-<link rel="canonical" href="http://yoursite.com/2016/12/16/2016-12-16-iOS10-UserNotification/"/>
+<link rel="canonical" href="http://yoursite.com/2016/12/16/2016-12-16-iOS10-UserNotification/">
 
 
 <meta name="description" content="iOS10 中统一了本地推送和远程推送的 API，在 UserNotifications.framework 来统一处理与推送相关任务，并增加了图片、音频、视频，自定义通知 UI 等新特性。 回顾推送的过程：app 向 apple 服务器申请注册通知，apple 服务器再向 APNs 服务器申请 token，APNs 将 token 发送给 app。app 保存这个 token 到个人服务器。在个">
-<meta name="keywords" content="iOS 开发笔记,iOS10,应用扩展,推送">
+<meta name="keywords" content="iOS 开发笔记,iOS10,推送,应用扩展">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS10.0 UserNotification 介绍">
 <meta property="og:url" content="http://yoursite.com/2016/12/16/2016-12-16-iOS10-UserNotification/index.html">
 <meta property="og:site_name" content="acumen1005">
 <meta property="og:description" content="iOS10 中统一了本地推送和远程推送的 API，在 UserNotifications.framework 来统一处理与推送相关任务，并增加了图片、音频、视频，自定义通知 UI 等新特性。 回顾推送的过程：app 向 apple 服务器申请注册通知，apple 服务器再向 APNs 服务器申请 token，APNs 将 token 发送给 app。app 保存这个 token 到个人服务器。在个">
+<meta property="og:locale" content="default">
 <meta property="og:image" content="http://ww4.sinaimg.cn/mw690/934b5ef8gw1farqjkb3noj20cz0dwjrr.jpg">
 <meta property="og:image" content="http://ww4.sinaimg.cn/mw690/934b5ef8gw1farr4s1ak7j20xm0mejvo.jpg">
 <meta property="og:image" content="http://ww4.sinaimg.cn/mw690/934b5ef8gw1fasdzfyjxvj20du06st98.jpg">
@@ -54,8 +55,8 @@
 <meta name="twitter:image" content="http://ww4.sinaimg.cn/mw690/934b5ef8gw1farqjkb3noj20cz0dwjrr.jpg">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
 
@@ -221,9 +222,9 @@
 		  
 			<a href="/tags/iOS10/">iOS10</a>
 		  
-			<a href="/tags/应用扩展/">应用扩展</a>
-		  
 			<a href="/tags/推送/">推送</a>
+		  
+			<a href="/tags/应用扩展/">应用扩展</a>
 		  
 		</div>
 		
@@ -277,7 +278,31 @@
     
         2016 -
     
-     
+    
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCLSX-Z_14rwcYrgyc7mVXI0lBHnzQjIOo",
+    authDomain: "blog-5bf4e.firebaseapp.com",
+    databaseURL: "https://blog-5bf4e.firebaseio.com",
+    projectId: "blog-5bf4e",
+    storageBucket: "blog-5bf4e.appspot.com",
+    messagingSenderId: "23978860195",
+    appId: "1:23978860195:web:802fdb66f68722c0bda916",
+    measurementId: "G-MZPGKWFTEP"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
     2019
     <span class="footer-author">acumen1005.</span>
     <span class="power-by">
@@ -294,7 +319,7 @@
     
 
 <script type="text/javascript">
-  var disqus_shortname = 'acumen1005';
+  var disqus_shortname = 'https-acumen1005-github-io';
   var disqus_identifier = '2016/12/16/2016-12-16-iOS10-UserNotification/';
 
   var disqus_title = "iOS10.0 UserNotification 介绍";

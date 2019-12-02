@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+  <head><meta name="generator" content="Hexo 3.9.0">
     
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="description" content="CocoaPods 打包静态库"/>
+  <meta name="description" content="CocoaPods 打包静态库">
 
 
 
 
-  <meta name="keywords" content="CocoaPods,静态库," />
+  <meta name="keywords" content="CocoaPods,静态库,">
 
 
 
@@ -28,11 +28,11 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
 
 
 
-<link rel="canonical" href="http://yoursite.com/2018/06/30/2018-06-30-cocoapods-static-library/"/>
+<link rel="canonical" href="http://yoursite.com/2018/06/30/2018-06-30-cocoapods-static-library/">
 
 
 <meta name="description" content="开发环境：  Xocde 9.4  CocoaPods 1.5.3   在 CocoaPods 1.5 之后终于开始支持打包静态库了，在上一篇启动优化的文章中介绍了动态库和静态库的区别。动态库的优势在于代码和资源共享，在一定程度上会减小 archive 的包，但是在 App 启动的时候需要加载连接，所以会影响启动时间。而静态库也就是我们编译好的二进制文件，不能共享代码和资源，所以在支持打包静态库之">
@@ -42,14 +42,15 @@
 <meta property="og:url" content="http://yoursite.com/2018/06/30/2018-06-30-cocoapods-static-library/index.html">
 <meta property="og:site_name" content="acumen1005">
 <meta property="og:description" content="开发环境：  Xocde 9.4  CocoaPods 1.5.3   在 CocoaPods 1.5 之后终于开始支持打包静态库了，在上一篇启动优化的文章中介绍了动态库和静态库的区别。动态库的优势在于代码和资源共享，在一定程度上会减小 archive 的包，但是在 App 启动的时候需要加载连接，所以会影响启动时间。而静态库也就是我们编译好的二进制文件，不能共享代码和资源，所以在支持打包静态库之">
+<meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2018-06-30T06:01:07.406Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CocoaPods 打包静态库">
 <meta name="twitter:description" content="开发环境：  Xocde 9.4  CocoaPods 1.5.3   在 CocoaPods 1.5 之后终于开始支持打包静态库了，在上一篇启动优化的文章中介绍了动态库和静态库的区别。动态库的优势在于代码和资源共享，在一定程度上会减小 archive 的包，但是在 App 启动的时候需要加载连接，所以会影响启动时间。而静态库也就是我们编译好的二进制文件，不能共享代码和资源，所以在支持打包静态库之">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
 
@@ -224,7 +225,31 @@
     
         2016 -
     
-     
+    
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCLSX-Z_14rwcYrgyc7mVXI0lBHnzQjIOo",
+    authDomain: "blog-5bf4e.firebaseapp.com",
+    databaseURL: "https://blog-5bf4e.firebaseio.com",
+    projectId: "blog-5bf4e",
+    storageBucket: "blog-5bf4e.appspot.com",
+    messagingSenderId: "23978860195",
+    appId: "1:23978860195:web:802fdb66f68722c0bda916",
+    measurementId: "G-MZPGKWFTEP"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
     2019
     <span class="footer-author">acumen1005.</span>
     <span class="power-by">
@@ -241,7 +266,7 @@
     
 
 <script type="text/javascript">
-  var disqus_shortname = 'acumen1005';
+  var disqus_shortname = 'https-acumen1005-github-io';
   var disqus_identifier = '2018/06/30/2018-06-30-cocoapods-static-library/';
 
   var disqus_title = "CocoaPods 打包静态库";

@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+  <head><meta name="generator" content="Hexo 3.9.0">
     
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="description" content="App 启动优化"/>
+  <meta name="description" content="App 启动优化">
 
 
 
 
-  <meta name="keywords" content="启动优化," />
+  <meta name="keywords" content="启动优化,">
 
 
 
@@ -28,11 +28,11 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
 
 
 
-<link rel="canonical" href="http://yoursite.com/2018/04/20/2018-04-20-app-launch-optimization/"/>
+<link rel="canonical" href="http://yoursite.com/2018/04/20/2018-04-20-app-launch-optimization/">
 
 
 <meta name="description" content="一个 App 的启动时间对于用户的使用体验有一定影响，如果我们的启动时间超过 20s 那么我们的 App 将会被系统 kill 掉，不是出现什么 bug 的话，一般不会达到这个阈值的。不过我们希望用户在第一时间或者是尽快能看到我们 App 的内容，那么优化启动的时间就很有必要了，App 启动的时间分为两部分：  pre-main 时间  main() 函数之后的时间   一些概念的介绍App 的启">
@@ -42,14 +42,15 @@
 <meta property="og:url" content="http://yoursite.com/2018/04/20/2018-04-20-app-launch-optimization/index.html">
 <meta property="og:site_name" content="acumen1005">
 <meta property="og:description" content="一个 App 的启动时间对于用户的使用体验有一定影响，如果我们的启动时间超过 20s 那么我们的 App 将会被系统 kill 掉，不是出现什么 bug 的话，一般不会达到这个阈值的。不过我们希望用户在第一时间或者是尽快能看到我们 App 的内容，那么优化启动的时间就很有必要了，App 启动的时间分为两部分：  pre-main 时间  main() 函数之后的时间   一些概念的介绍App 的启">
+<meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2018-04-25T07:49:48.103Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="App 启动优化">
 <meta name="twitter:description" content="一个 App 的启动时间对于用户的使用体验有一定影响，如果我们的启动时间超过 20s 那么我们的 App 将会被系统 kill 掉，不是出现什么 bug 的话，一般不会达到这个阈值的。不过我们希望用户在第一时间或者是尽快能看到我们 App 的内容，那么优化启动的时间就很有必要了，App 启动的时间分为两部分：  pre-main 时间  main() 函数之后的时间   一些概念的介绍App 的启">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
 
@@ -273,7 +274,31 @@
     
         2016 -
     
-     
+    
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCLSX-Z_14rwcYrgyc7mVXI0lBHnzQjIOo",
+    authDomain: "blog-5bf4e.firebaseapp.com",
+    databaseURL: "https://blog-5bf4e.firebaseio.com",
+    projectId: "blog-5bf4e",
+    storageBucket: "blog-5bf4e.appspot.com",
+    messagingSenderId: "23978860195",
+    appId: "1:23978860195:web:802fdb66f68722c0bda916",
+    measurementId: "G-MZPGKWFTEP"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
     2019
     <span class="footer-author">acumen1005.</span>
     <span class="power-by">
@@ -290,7 +315,7 @@
     
 
 <script type="text/javascript">
-  var disqus_shortname = 'acumen1005';
+  var disqus_shortname = 'https-acumen1005-github-io';
   var disqus_identifier = '2018/04/20/2018-04-20-app-launch-optimization/';
 
   var disqus_title = "App 启动优化";

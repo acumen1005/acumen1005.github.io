@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+  <head><meta name="generator" content="Hexo 3.9.0">
     
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="description" content="无缝链接 Universal Links"/>
+  <meta name="description" content="无缝链接 Universal Links">
 
 
 
 
-  <meta name="keywords" content="Universal Links,Deep Links,iOS9," />
+  <meta name="keywords" content="Universal Links,Deep Links,iOS9,">
 
 
 
@@ -28,11 +28,11 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
 
 
 
-<link rel="canonical" href="http://yoursite.com/2017/02/06/2017-02-06-seamless-linking-to-your-app/"/>
+<link rel="canonical" href="http://yoursite.com/2017/02/06/2017-02-06-seamless-linking-to-your-app/">
 
 
 <meta name="description" content="Apple 在 iOS9 加入的一个通用链接 (Universal Link) 的深度链接特性，这个特性让我们可以无缝的引导用户到 APP 上，在用户使用时有更好的体验。本文简单的介绍一下什么是通用链接？如何使用这个 iOS9 的特性。 什么是通用链接？Apple 推出的通用链接：  一种能够方便的通过传统 HTTP 链接来启动 APP, 使用相同的网址打开网站和 APP。    通过唯一的 UR">
@@ -42,14 +42,15 @@
 <meta property="og:url" content="http://yoursite.com/2017/02/06/2017-02-06-seamless-linking-to-your-app/index.html">
 <meta property="og:site_name" content="acumen1005">
 <meta property="og:description" content="Apple 在 iOS9 加入的一个通用链接 (Universal Link) 的深度链接特性，这个特性让我们可以无缝的引导用户到 APP 上，在用户使用时有更好的体验。本文简单的介绍一下什么是通用链接？如何使用这个 iOS9 的特性。 什么是通用链接？Apple 推出的通用链接：  一种能够方便的通过传统 HTTP 链接来启动 APP, 使用相同的网址打开网站和 APP。    通过唯一的 UR">
+<meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2018-04-20T05:23:00.182Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="无缝链接 Universal Links">
 <meta name="twitter:description" content="Apple 在 iOS9 加入的一个通用链接 (Universal Link) 的深度链接特性，这个特性让我们可以无缝的引导用户到 APP 上，在用户使用时有更好的体验。本文简单的介绍一下什么是通用链接？如何使用这个 iOS9 的特性。 什么是通用链接？Apple 推出的通用链接：  一种能够方便的通过传统 HTTP 链接来启动 APP, 使用相同的网址打开网站和 APP。    通过唯一的 UR">
 
 
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
 
@@ -237,7 +238,31 @@
     
         2016 -
     
-     
+    
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCLSX-Z_14rwcYrgyc7mVXI0lBHnzQjIOo",
+    authDomain: "blog-5bf4e.firebaseapp.com",
+    databaseURL: "https://blog-5bf4e.firebaseio.com",
+    projectId: "blog-5bf4e",
+    storageBucket: "blog-5bf4e.appspot.com",
+    messagingSenderId: "23978860195",
+    appId: "1:23978860195:web:802fdb66f68722c0bda916",
+    measurementId: "G-MZPGKWFTEP"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
     2019
     <span class="footer-author">acumen1005.</span>
     <span class="power-by">
@@ -254,7 +279,7 @@
     
 
 <script type="text/javascript">
-  var disqus_shortname = 'acumen1005';
+  var disqus_shortname = 'https-acumen1005-github-io';
   var disqus_identifier = '2017/02/06/2017-02-06-seamless-linking-to-your-app/';
 
   var disqus_title = "无缝链接 Universal Links";
